@@ -1,0 +1,598 @@
+{
+  "source_commit": "66a0ebc2510d4ffb0db403fdee10d378ddc57d42",
+  "source_root": "/Users/admin/Git/dta",
+  "files": [
+    {
+      "path": ".planning/road-closure-apis-reference.md",
+      "sha256": "1cf706bdd66df11bc8ffd12d2590fd9f95b3d754a5347cd11d489b83faa178df"
+    },
+    {
+      "path": ".planning/road-closure-improvements-roadmap.md",
+      "sha256": "b9aa929165b84215da95aefa95fac543166b36cb18cf4814722c458fd88aa7f3"
+    },
+    {
+      "path": "apps/admin/functions/_middleware.ts",
+      "sha256": "f751e4ec84a2a52bb93edfd8a6e19878dd78f7b02dc57db719a9cb7735d87d88"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/analytics/road-closures.ts",
+      "sha256": "03a02b964915a0df384c28d94350cc439c914a20f469d7913ba7436c21d89061"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/awareness-calendar.ts",
+      "sha256": "ec9f83940f5f0e7181dd30cb31a32140825bcdf6e350c7085a70e97784a18ce5"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/awareness-calendar/[id].ts",
+      "sha256": "54f705ec3026b4e5de6932373dea8f6999134f84f231198e130f660a1cc8d741"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/awareness-calendar/[id]/closure-businesses.ts",
+      "sha256": "bf5729d40fc3a0069ca0aa1ffbd8c8b3e352d9b72ea92f42860fc2513df39158"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/awareness-calendar/[id]/closure-draft.ts",
+      "sha256": "89ff577a4e140a26cc3c06aa91b3d2b38d1cb595bf0776bd77d805fbc87acf89"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/closure-confirmation-emails.ts",
+      "sha256": "cab4536d6de4b2a29f02f5c25e96dd3517caa4fa6c68aa79f8dae68bbad9b0f8"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/dashboard/closure-warnings.test.ts",
+      "sha256": "0c2ba6ee99a85cfb8036b0f92b7352a65ecc151aca451eaa885c38c50f3fe9ad"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/dashboard/closure-warnings.ts",
+      "sha256": "eec654c5ff63b17a3cbe1350c016cc756e5a4f3cd27e45cbbaf7bfb71c228ee0"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/producer/events/[slug]/closure-businesses.ts",
+      "sha256": "74d30bc0f37060889f51bfb44a6e2bc950403c28d9cca904b03edc985d0545d4"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/producer/events/[slug]/closure-draft.ts",
+      "sha256": "c1c03801087b97ec73f3ee08de677b6dc745566a4afefaa9b0fb70134f0edfed"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/program-review/[slug]/closure-businesses.ts",
+      "sha256": "04b579e279c81b5364fed9aad022f395842fab88c4fee4685b16dd0df5f4cdb1"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/program-review/[slug]/closure-draft.ts",
+      "sha256": "1909446befb05c1f30e0f7ce944e343252127ea9662d938060c32a54a5a1c6dc"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/program-review/[slug]/closure-invite.ts",
+      "sha256": "6041b17e45aac82a7f1241981f8135bbf07b75caac89e947509aafeb1ec1e3b9"
+    },
+    {
+      "path": "apps/admin/functions/api/admin/program-review/[slug]/closure-link.ts",
+      "sha256": "aeeaacaf892170e545ce17ffbed8fceb70e04f991d7c38bf63bd4b3c6e02d19f"
+    },
+    {
+      "path": "apps/admin/functions/lib/awareness-calendar.ts",
+      "sha256": "cbcd8a8f6ebf323b970915d4a37b9a44a572e21cbfcea614fc983a047e3f5db5"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-businesses.test.ts",
+      "sha256": "ffcbabe9d13de5c3bccbba431b3e31846be94b164a3eacb93d00af36e426e4ce"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-businesses.ts",
+      "sha256": "470edacccc5c3c85e772009f00fa0617011e9c885f4d3fe63829c9550a784d00"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-courtesy-assets.ts",
+      "sha256": "84279c4bc1cd766eb1997a58cb0427c82f9afe934b141454d20b11e348bc2f49"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-courtesy-contacts.ts",
+      "sha256": "e3eb11b31f1692cab60a3dde5d502fe7c154d3c7ff2e90fed1a4381cfd0f8f36"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-courtesy-draft.ts",
+      "sha256": "53df2be608fca8515599f9e3a9d354504c269ee8eed4b415f6f9a695fd14083e"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-courtesy-email.test.ts",
+      "sha256": "b0ef52e4976382ab1007e62eebc6d7708a544e17cc3180bc5cd04a130fdf0c8b"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-courtesy-email.ts",
+      "sha256": "6f539468077b7e46f2c947eea5e78526be086d5d43015ae48fef7d46621c485c"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-import.test.ts",
+      "sha256": "6abce975213fe3300337a1d09a7901846c41ca6f3e2de148def112fd92a6db6c"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-import.ts",
+      "sha256": "8187317ae458bcc148b58510e20a59ad7ba28389cee29088598a0675ddbde388"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-source-facts.test.ts",
+      "sha256": "d96dab6d4f496a39a4feec518da380fe3fb4cf0197bf13f4a903b09ad76677a5"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-source-facts.ts",
+      "sha256": "e81c14c602a7e9b8a260a08f81078ab6e7876d6500f6f8ae9214a29fdbf4300c"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-zoom.test.ts",
+      "sha256": "8f79f26c196c4d27e0d573e81ab461f44fe6294d35523b0a31b88f5b2624b2cb"
+    },
+    {
+      "path": "apps/admin/functions/lib/closure-zoom.ts",
+      "sha256": "3d6f56a8df372a9897b7e06975e1b214fabbd9431d5ad77824847da25bd28ec6"
+    },
+    {
+      "path": "apps/admin/functions/lib/mapping-provider-notification.ts",
+      "sha256": "7651205ca4b4e737e756031866569ca5e96770b44907a8e27cb564d77afad703"
+    },
+    {
+      "path": "apps/admin/src/App.tsx",
+      "sha256": "c94f8d3ff2ce0d1f5379c1ecbd487122734e17aa2ff7f3b5d653eb65851b157e"
+    },
+    {
+      "path": "apps/admin/src/components/ClosureBusinessImpact.tsx",
+      "sha256": "4a206d8874903fe2f9626b8bf0d1b8f3dcfa4a4b36c5b6fdd4c89c4d44a6cffc"
+    },
+    {
+      "path": "apps/admin/src/components/ClosureCourtesyEmail.test.tsx",
+      "sha256": "32e79e29e3eaf7a996e2896d29120057911fc849e6521f79d885352a7a57aa88"
+    },
+    {
+      "path": "apps/admin/src/components/ClosureCourtesyEmail.tsx",
+      "sha256": "21871735405392a98fbce321afb8741a0893f2e803ff87c5cab62e9b119e0056"
+    },
+    {
+      "path": "apps/admin/src/components/ClosureDetourFields.tsx",
+      "sha256": "addd89aeb7f665c967f7f2428c06ce4b5f8fa378441298b18700f4a6ed5ebfdc"
+    },
+    {
+      "path": "apps/admin/src/components/ClosureImport.tsx",
+      "sha256": "aeded6f58e06fae6739463b7f9341389573a4ad9eab00652bae7b71bab855c6f"
+    },
+    {
+      "path": "apps/admin/src/components/ClosureParkingImpact.tsx",
+      "sha256": "faf025a43ce647f5d522e9a4fbbaa0de971fa6a1a1cd7cf6888f5c2632ec4881"
+    },
+    {
+      "path": "apps/admin/src/components/ClosureSourceFields.tsx",
+      "sha256": "47651acdb417455cb4f2db35bf0e89e481ea731aeb6e08b854e0a6c505b4c86e"
+    },
+    {
+      "path": "apps/admin/src/components/ClosureTimeInput.tsx",
+      "sha256": "9cf811e5abe36a7493b615e8a6a6ef4c6e14cf9f42156c59008d5c9d7199c596"
+    },
+    {
+      "path": "apps/admin/src/components/OrganizerNotes.tsx",
+      "sha256": "299b13f6edbc9fd3f09fbd4196a68750af9552c8cb087012e416688e0f7cd78e"
+    },
+    {
+      "path": "apps/admin/src/components/StreetClosureExport.tsx",
+      "sha256": "9e9583f7deaf477bc774d3867c3cc7b2be872e20868c781626755fd7eb3e98e0"
+    },
+    {
+      "path": "apps/admin/src/components/StreetClosureMap.tsx",
+      "sha256": "ca39effffb33649edaca2e5bb96f1ee9d3ffa7e95781e4d77c7fa873138cf7bf"
+    },
+    {
+      "path": "apps/admin/src/components/StreetClosureSummary.tsx",
+      "sha256": "ba2cd7451255e2559fb02a2b39ec44b147a47df36891d8de6f5607c7314f685a"
+    },
+    {
+      "path": "apps/admin/src/components/StreetExtentEditor.tsx",
+      "sha256": "bcd23a93cda7cc7ba82d878f2d8cffd04bac81c23999192c9c7c1e5e4b4fa99e"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-map-export.ts",
+      "sha256": "8fad6437c8f805e10a0f934c7f07cbc5eb0d8eb328b4e817daf3d0f7fc2f0405"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-map-orientation.ts",
+      "sha256": "86b591aa86345963bd3ada47f1c663ca4772912e0bd158089b4feeaaafb9e065"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-map.ts",
+      "sha256": "2de6992fe2fe5f528a5a12f6905f2e90632e1d91d6c92c8782dad011dd9a5e22"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-phases.ts",
+      "sha256": "983b745a9c19c1982862080cc9fc3ec0884292debfeabcf071f28d1968847295"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-plan-pdf.ts",
+      "sha256": "238629759b7d351f77987f069b0a4974e2671d2b50fa9657a1e2d306665740ce"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-planning.ts",
+      "sha256": "6a84d6eff5af79becd37ef5762bb34d3092b30b7513746f1c5a42e4fbd51f098"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-public-map.ts",
+      "sha256": "90c3b9d7aa956b0a39d982d7efa01f0e745632a82f9a882b9b2f904512c3c060"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-response.test.ts",
+      "sha256": "ae26469bcdb6e257ba896199b53a1c9658c072c5b3bc9771cc4ee334c3d9c0f6"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-response.ts",
+      "sha256": "2b281d1a53137256f9ccb99f55818a52c000290c52b8721d5443ac00dfa82a1f"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-source-media.ts",
+      "sha256": "c71c92323d3ce8c180c02db727c7e52d805ba35021f6aed322be7dd35adf3ded"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-zoom.test.ts",
+      "sha256": "ce31ced8e291c23b7727b266b01539082e1ac25f7e5fc219f5e3e9d49fa327fb"
+    },
+    {
+      "path": "apps/admin/src/lib/closure-zoom.ts",
+      "sha256": "d570564246dbeaff82ceb73b9099ed43ae9f908dc9b8741c9af9ad8e31ad0015"
+    },
+    {
+      "path": "apps/admin/src/lib/homecoming-closure-draft.test.ts",
+      "sha256": "6cec1e76e1036f067d8d3abf6d45e2e607c9558af98dd3e906d53135d089a598"
+    },
+    {
+      "path": "apps/admin/src/lib/homecoming-closure-draft.ts",
+      "sha256": "76c8d3f19995a1166fdadfe9bcfea6236b2c975f6a0802186fd5466e30c13a3b"
+    },
+    {
+      "path": "apps/admin/src/pages/AwarenessClosuresPage.tsx",
+      "sha256": "487c4a7d96767213da17cdb4193fda5c875ab68cddb9d55e7cd015e004bc78cc"
+    },
+    {
+      "path": "apps/admin/src/pages/ClosureEmailDraftPage.test.tsx",
+      "sha256": "2b888dc252944dcc66baf40b7211f001dda29c13d03ef44c251f08e43c17f4c8"
+    },
+    {
+      "path": "apps/admin/src/pages/ClosureEmailDraftPage.tsx",
+      "sha256": "59bbe803f2ac1b1333195b5e8a046345751ce36449283f161e9ef165c36de7d8"
+    },
+    {
+      "path": "apps/admin/src/pages/RoadClosureAnalyticsPage.tsx",
+      "sha256": "0125396b5c131988a57a987e50045dfa0d69a7bdbeb2a2a700b4ae0613d1bd44"
+    },
+    {
+      "path": "apps/admin/tests/awareness-closure-businesses.test.ts",
+      "sha256": "bfc2f1a80c6f609c2b0b4bdf3a10f7ed628afa19c767e96b7e727f6c50477dca"
+    },
+    {
+      "path": "apps/admin/tests/awareness-closure-detail.test.ts",
+      "sha256": "21d5545569222a477103cb97772ffa8940ed6a7c8895ec82b721fd11aa5f5f3a"
+    },
+    {
+      "path": "apps/admin/tests/awareness-closures-page.test.tsx",
+      "sha256": "bb639992713d3cffb9624b882c143e6b27e97b257409c3855a636c56e2e39f68"
+    },
+    {
+      "path": "apps/admin/tests/closure-business-impact.test.tsx",
+      "sha256": "7fe1ba4c9910d2927a5cd58ae0302dea4f0a98d17f98b829eb73f46c6050f332"
+    },
+    {
+      "path": "apps/admin/tests/closure-confirmation-emails.test.ts",
+      "sha256": "dbe7ced14aa58f26fb9c7b844be649145e481c0b91d69fad79e9a48150c54bca"
+    },
+    {
+      "path": "apps/admin/tests/closure-import-map-suggestion.test.tsx",
+      "sha256": "2cb04a43916ee85257111cf64e071027ce8dbbdeadfe3c21750a8fdf7461a8be"
+    },
+    {
+      "path": "apps/admin/tests/closure-import.test.tsx",
+      "sha256": "3ad35d99b3eeb8a0ac47dbe1ff4bde8a87361aa9291c92668ab24e3736829449"
+    },
+    {
+      "path": "apps/admin/tests/closure-map-export.test.ts",
+      "sha256": "8b3fe0f71e81ac65a282e0cc220ca234dbc7253061d0078b1653fe81105f031d"
+    },
+    {
+      "path": "apps/admin/tests/closure-parking-review.test.tsx",
+      "sha256": "379bd3d5c14a4e1cb8e020f277cce5e226ced5d5d49869889d9782b676435823"
+    },
+    {
+      "path": "apps/admin/tests/closure-phases.test.ts",
+      "sha256": "f0df71b93976ae850d72d310037ee6e8c3bfdb7ec8f23c4d00a6a37a4ea47459"
+    },
+    {
+      "path": "apps/admin/tests/closure-plan-pdf.test.ts",
+      "sha256": "2bab09666a27988adf8ead63f51e815f1350952f82fd231b01e67004155a8c61"
+    },
+    {
+      "path": "apps/admin/tests/closure-planning.test.ts",
+      "sha256": "58ce101e6f90ee54ca755fe23bc5507ac63ca66851f4b568cb2cf97cd5880ad7"
+    },
+    {
+      "path": "apps/admin/tests/closure-quoted-road-source.test.ts",
+      "sha256": "241c9df702c0eb92ab9acb343028ddc381731e2084ab2fd1b048f7527b486ce3"
+    },
+    {
+      "path": "apps/admin/tests/mapping-provider-notification.test.ts",
+      "sha256": "b7ac7e2c5c3df09867eabb80c0349dc22d563289c1655f8ad07630ab8564595a"
+    },
+    {
+      "path": "apps/admin/tests/organizer-closures.test.tsx",
+      "sha256": "fe9f58483330fffa2837c4f722268dd93195b519ee55f98a6af3cc82f11f313a"
+    },
+    {
+      "path": "apps/admin/tests/road-closure-analytics-report.test.ts",
+      "sha256": "ee4bad2f58cc17b1695eeabbd6cc33dd5bb658abd2749dc84d6c32bdda49e8f6"
+    },
+    {
+      "path": "apps/admin/tests/street-closure-map.test.tsx",
+      "sha256": "0cb97120fe8c0c4420412e6d0ab44cbf14ca37e1c67a58dce3ad54d65e9e8acb"
+    },
+    {
+      "path": "apps/main/functions/_middleware.ts",
+      "sha256": "860d7781cbbc1a145b9ba8ebcf3c2be9e34dc9194be7a0e9d9aa549aac7d83a8"
+    },
+    {
+      "path": "apps/main/functions/_shared/public-road-closure-image.ts",
+      "sha256": "304d3ec00bf40e987916d412316b8d928f643c2953187d17abef06a15b546177"
+    },
+    {
+      "path": "apps/main/functions/_shared/public-road-closures.ts",
+      "sha256": "c101cf51a29f0b73237c996b1ae8a11aaa373f3360d3b18a69bf7257b4ecabfb"
+    },
+    {
+      "path": "apps/main/functions/_shared/road-closure-analytics.ts",
+      "sha256": "175a80e33e1ea5e451201d836ddff4623d6648df1d63dbd6394f8b5464b7bcb7"
+    },
+    {
+      "path": "apps/main/functions/api/road-closures.test.ts",
+      "sha256": "3ddc945f3b1603b6410c7e8efe3be2f2cf19a7dbf7d24ad6cf6e9591e3300dfd"
+    },
+    {
+      "path": "apps/main/functions/api/road-closures.ts",
+      "sha256": "35535ab375696791d6709875b2e8868059f5111b3c21083597ceb0ad5c2cde59"
+    },
+    {
+      "path": "apps/main/functions/api/road-closures/events.ts",
+      "sha256": "21d76a983590f15708f2f65f30976d650aff9e965a754db765d94a9eef91fe7b"
+    },
+    {
+      "path": "apps/main/functions/api/road-closures/maps/[id].ts",
+      "sha256": "92a329aad65cb714ed662642c8def0f904a9b39f2dd8c088d581cad75645d9c7"
+    },
+    {
+      "path": "apps/main/functions/api/road-closures/openapi.json.ts",
+      "sha256": "13d979c034695958701c2bf6ba1d1f9ebec6ac482d03aab9509459226c8cb06b"
+    },
+    {
+      "path": "apps/main/functions/api/road-closures/parking.ts",
+      "sha256": "4c58622b893b9d6757774cbc817dd0518a7693f557a604ddf935d4b406c39d40"
+    },
+    {
+      "path": "apps/main/functions/road-closures/[date].ts",
+      "sha256": "d4377a166b0fe4f63fca56e8ab4fa4920762af4c3319c95e435d100156486b0f"
+    },
+    {
+      "path": "apps/main/functions/road-closures/index.ts",
+      "sha256": "46ab609c855b75d66c314ba39bd7f6a0f2bced6750f14f33963916ac1ff094e6"
+    },
+    {
+      "path": "apps/main/migrations/075_market_house_green_street_closure.sql",
+      "sha256": "9ac14369c10757ee7cc1176a89f2c6f313175d1dacfbe0685c6c18bc2b7a1237"
+    },
+    {
+      "path": "apps/main/migrations/251_awareness_calendar_city_closure_list.sql",
+      "sha256": "987885c75e94870f1e7fd0f669356fe1fbc09472dad2f95a3bae8a0385338a47"
+    },
+    {
+      "path": "apps/main/migrations/252_awareness_calendar_closure_detail.sql",
+      "sha256": "ea0b68ea21e426d52d4f9c8000c7a33a47f4bfd87810bf8da7fa419ff2b38276"
+    },
+    {
+      "path": "apps/main/migrations/361_offering_location_and_street_closures.sql",
+      "sha256": "ed35a09dc761f1906f4492b741190216a6b70d0d880d39f61c37f78b6321823e"
+    },
+    {
+      "path": "apps/main/migrations/370_program_street_closure_plan.sql",
+      "sha256": "685d63b4f27e65053fb2e976d637a985a260c346f453b9ea8156e35fa687c3f7"
+    },
+    {
+      "path": "apps/main/migrations/371_awareness_street_closure_plan.sql",
+      "sha256": "bee59fab9ce681f49e31df8bbbf0896e113b9d62df3b01f00e4eb48ca6233755"
+    },
+    {
+      "path": "apps/main/migrations/372_public_road_closure_days.sql",
+      "sha256": "ce8a1604a3feac6d9cfe70be55257895a9b8110789ced70698444d325b35f11d"
+    },
+    {
+      "path": "apps/main/migrations/375_closure_courtesy_emails.sql",
+      "sha256": "436139e359375276f70b56cd3f3070453cfa3f561e75ffd0c4e0d79203bdea17"
+    },
+    {
+      "path": "apps/main/migrations/377_closure_business_contact_links.sql",
+      "sha256": "75b31e282e5fb2ba4ad2979603405ce4593ba1b60e7c94a754a6e0fc3d6a9b8c"
+    },
+    {
+      "path": "apps/main/migrations/399_road_closure_daily.sql",
+      "sha256": "0677b42c93d93a9c7874ad27d287732a8b79f6f10be51d221ac4d3ed80c1f8e7"
+    },
+    {
+      "path": "apps/main/src/App.tsx",
+      "sha256": "e5ac2e3376586310ce610f724297777da85ce86c4adbcbdd1c5b87c546bc010d"
+    },
+    {
+      "path": "apps/main/src/components/ProgramStreetClosures.tsx",
+      "sha256": "ec6d8f4e65f4a93b2c46bb1a531d1e46a26f62a85202e5b1daae3e1295d4c1ac"
+    },
+    {
+      "path": "apps/main/src/components/PublicRoadClosureMap.tsx",
+      "sha256": "be3fd1a5dabbbadb5ce12d1529e046af3df48caada3becdc1235dc1d367349e7"
+    },
+    {
+      "path": "apps/main/src/components/RoadClosureMapImage.tsx",
+      "sha256": "f924bb236cf7ee51d7787c41170956e26e87cc4b93aabaf9a2008700eadb1c70"
+    },
+    {
+      "path": "apps/main/src/components/RoadClosureParking.tsx",
+      "sha256": "dcde136dffab26f96aa427516fa32e13f2fc07732572237bd32d33ae2a3042b6"
+    },
+    {
+      "path": "apps/main/src/components/UpcomingRoadClosures.tsx",
+      "sha256": "dc497e726078ce5b2a2391c0584f613e0713e3c46e54a7c7e86c659d59817608"
+    },
+    {
+      "path": "apps/main/src/lib/road-closure-analytics.ts",
+      "sha256": "c23c286ba5c48db6a5ca4499010fb43cd5ed181648db7c206a42cd14048acbb1"
+    },
+    {
+      "path": "apps/main/src/pages/RoadClosuresPage.test.tsx",
+      "sha256": "92701af41e94e410691bdb494f8cb150484eade22874f8344c1234cd881db0c8"
+    },
+    {
+      "path": "apps/main/src/pages/RoadClosuresPage.tsx",
+      "sha256": "caa466f78bf7adcbad5096328550efac37bd8ac750cd456841edc88e3ae89fda"
+    },
+    {
+      "path": "apps/main/tests/road-closure-analytics.test.ts",
+      "sha256": "ba4b7144dd320be104973a9bdaef7d50d23e299f166d4b3140e18b7178d1293e"
+    },
+    {
+      "path": "docs/closure-image-import-audit.md",
+      "sha256": "fce5008357aff857a8ece4654f37c0631654302abcc7682cf2e62ae6bbaf9fac"
+    },
+    {
+      "path": "docs/closure-release-checklist.md",
+      "sha256": "e36800e9b062a83c49797c95b4a4a96434d57759c958f2f9de2aab64d86437a5"
+    },
+    {
+      "path": "docs/program-street-closures.md",
+      "sha256": "80a335e11c02bac4f4a5387ec1662a7a7d3849da45a92a54cc20e18f72b8183e"
+    },
+    {
+      "path": "docs/road-closures-api.md",
+      "sha256": "8dd579b1d88e1f76d00912795f87757b07f85e2d42c772347aaa23c18cb8f463"
+    },
+    {
+      "path": "packages/shared/src/closure-business-impact.test.ts",
+      "sha256": "99c021c4ba9ee2d3fefd384dd22ba0f83707fdcee75bdb5ffa2b11ebc372c5e5"
+    },
+    {
+      "path": "packages/shared/src/closure-business-impact.ts",
+      "sha256": "bca3b6229fc91f775ec25b7ec2424bb7d70be154f15701c40eb5d06bd59c4a3c"
+    },
+    {
+      "path": "packages/shared/src/closure-courtesy-media.ts",
+      "sha256": "9a76aa5c650127956100d54f8f9c9e1c8d4e4bf814ab77f506c5baba57d8313a"
+    },
+    {
+      "path": "packages/shared/src/closure-email-citation.test.ts",
+      "sha256": "e74252fb2bf7c0d9de567bec0a91b85bdb211dafe580d0c164207a4eb5e158dc"
+    },
+    {
+      "path": "packages/shared/src/closure-email-citation.ts",
+      "sha256": "fd2c23b0692c7a03e9c57986ffd1f35607b0e8be9fd25c21e14b99f6ac824388"
+    },
+    {
+      "path": "packages/shared/src/closure-import.test.ts",
+      "sha256": "5c7c0e195cf4b4f2cc49f6e7100659142b00a2af5ad2544dbfdfce6eb3513e3a"
+    },
+    {
+      "path": "packages/shared/src/closure-import.ts",
+      "sha256": "0d19665188c7780565f4a15ac6ae1f0a48587f98374970933c26bbaab1480064"
+    },
+    {
+      "path": "packages/shared/src/closure-map-review.test.ts",
+      "sha256": "9bbdc8579239f6da68b89867625731fd1609693cb7a8268cde47e9a90e64b2aa"
+    },
+    {
+      "path": "packages/shared/src/closure-map-review.ts",
+      "sha256": "3deeea4cfe9ff9780cefb965b1dea8f96e3ed3c1c6b860ea53c001c3e3d83e18"
+    },
+    {
+      "path": "packages/shared/src/closure-parking-impact.test.ts",
+      "sha256": "8e1f3799c84893aebb4c2b63192c7003a3262bea811f7ab8072c939dbc04669f"
+    },
+    {
+      "path": "packages/shared/src/closure-parking-impact.ts",
+      "sha256": "967d9fc5cad3695cc3bd8478230d21eefb01c42b76b59c73125c8a20090532dd"
+    },
+    {
+      "path": "packages/shared/src/closure-parking.generated.json",
+      "sha256": "84d8f26ef657148e10d4bd099f93bc0cf1f40b57bf7be6405872b4c89d8f1735"
+    },
+    {
+      "path": "packages/shared/src/closure-plan-fingerprint.ts",
+      "sha256": "ed158683492edf34afdcf57bb97bd605055bf3262ee798fad10b9f7d1ec790ad"
+    },
+    {
+      "path": "packages/shared/src/closure-traffic-legend.ts",
+      "sha256": "cc9b19994bf6cccd9ea31ad93fe91f07cb06bd21acb72d7de0ddf9c411277693"
+    },
+    {
+      "path": "packages/shared/src/downtown-streets.json",
+      "sha256": "7b8766b1461472e3980c996afdd213d661769c509781748cf2e2143f44c04e08"
+    },
+    {
+      "path": "packages/shared/src/dues-disclosure.ts",
+      "sha256": "108feec5432915e473d239358845cfc605ba9f3d6570cd1c9a19a1647d52041c"
+    },
+    {
+      "path": "packages/shared/src/public-road-closures.test.ts",
+      "sha256": "7a94c90d5a210b3199231687a27724524f361e1a42270ec0adada575a8633612"
+    },
+    {
+      "path": "packages/shared/src/public-road-closures.ts",
+      "sha256": "73b04697c3ac0b8278161d3ea07d4ba31d9e209dff40054cd608636b23132dfb"
+    },
+    {
+      "path": "packages/shared/src/road-closure-analytics.ts",
+      "sha256": "0375b4f646cf1270b2cb2cd6094afca6da239e24ddeaf1200fdb22cf5f4973b2"
+    },
+    {
+      "path": "packages/shared/src/road-closure-seo.test.ts",
+      "sha256": "19f3e4adc69971edd3e90d87be85ff7d21a050c46afd22a40ecb491f18877fb6"
+    },
+    {
+      "path": "packages/shared/src/road-closure-seo.ts",
+      "sha256": "97a4636346e696190dba5d7b0a59efb73cb92d8d96060945d090287fd9aa2c2b"
+    },
+    {
+      "path": "packages/shared/src/road-closures.openapi.json",
+      "sha256": "0cb6eea9ae0df177e4903139135b37efbf358670ac7b8569279bd95f57ecbf29"
+    },
+    {
+      "path": "packages/shared/src/street-closures.test.ts",
+      "sha256": "9ac80d781b05f5b68bccf1b3da6361d714219bb2e7b4d35453363118c94eaf7e"
+    },
+    {
+      "path": "packages/shared/src/street-closures.ts",
+      "sha256": "0203dbe5ba113b72524799ebeed79bb89cc2a1384b927cff398e11cf77c04773"
+    },
+    {
+      "path": "packages/shared/src/street-positions.test.ts",
+      "sha256": "c29e48a8e933fba88e12a0540b87e288bd30fe5fc9d7873e972cac9b049caf5e"
+    },
+    {
+      "path": "packages/shared/src/street-positions.ts",
+      "sha256": "e96843c577b2bf9bbafc201d64c0259f63ea28070239f8442d06af70dafcd996"
+    },
+    {
+      "path": "scripts/build-road-closures-docs.mjs",
+      "sha256": "cf1f2ff6307866f06b1ad8555fbcfb152d6fa51f06d951809c9b846e23acceab"
+    },
+    {
+      "path": "scripts/deploy-road-closures.mjs",
+      "sha256": "75279cb2c23132f40843dbad78e9ed7221f897bd41d69f9a97aaa9b727337741"
+    },
+    {
+      "path": "scripts/road-closure-process.test.mjs",
+      "sha256": "ff4ee8d3a5c8b740a469d8b14b65015f3db9d29e2d89fd2c1a1164f55a1d9d94"
+    },
+    {
+      "path": "scripts/sync-closure-parking.mjs",
+      "sha256": "936e6c17baad6e92b9b064eb99e04a3df765f9eb4af2f77d6dd8033d6119e590"
+    },
+    {
+      "path": "scripts/verify-road-closure-preview.mjs",
+      "sha256": "9ce6b46e5ca01c297e4b85a339d91f507a53e01d062244e6ca89437deb6f410e"
+    }
+  ]
+}
