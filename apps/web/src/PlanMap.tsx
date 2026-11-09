@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Map as LibreMap, GeoJSONSource } from 'maplibre-gl'
 import { roadsFor, type Plan, type Region } from '@map-planner/domain'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 
 export function PlanMap({ region, plan }: { region: Region; plan: Plan }) {
   const container = useRef<HTMLDivElement>(null)
@@ -11,7 +12,8 @@ export function PlanMap({ region, plan }: { region: Region; plan: Plan }) {
   useEffect(() => {
     let disposed = false
     setFailure(''); setReady(false)
-    void import('maplibre-gl').then(({ Map, NavigationControl }) => {
+    void import('maplibre-gl').then(({ Map, NavigationControl, setWorkerUrl }) => {
+      setWorkerUrl(workerUrl)
       if (disposed || !container.current) return
       try {
         const instance = new Map({ container: container.current, center: region.center, zoom: 15,
@@ -39,7 +41,7 @@ export function PlanMap({ region, plan }: { region: Region; plan: Plan }) {
     const source = map.current.getSource('restrictions') as GeoJSONSource | undefined
     source?.setData({ type: 'FeatureCollection', features: plan.entries.filter(entry => entry.status !== 'cancelled' && entry.geometry).map(entry => ({ type: 'Feature', id: entry.id, geometry: entry.geometry!, properties: {} })) })
   }, [plan, ready])
-  return <figure className="map-figure">
+  return <figure className="map-figure" data-map-state={failure ? 'failed' : ready ? 'ready' : 'loading'}>
     <div ref={container} className="map-canvas" role="region" aria-label="Illustrative map of synthetic reference roads and draft restrictions" />
     {failure && <p role="status" className="map-fallback">{failure}</p>}
     <figcaption><span className="map-key" aria-hidden="true" /> Draft restrictions · Gray lines are fictitious reference streets. No City or OSM geometry is loaded.</figcaption>

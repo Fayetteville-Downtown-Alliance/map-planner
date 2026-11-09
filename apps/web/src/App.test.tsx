@@ -70,3 +70,20 @@ it('recovers an accepted write by receipt when its response is interrupted', asy
   expect(store.list('sandbox')[0].revision).toBe(1)
   expect(failed).toBe(true)
 })
+it('keeps a draft and pauses writes when a 200 write response has an invalid record shape', async () => {
+  let failed = false
+  vi.stubGlobal('fetch', async (path: string, init?: RequestInit) => {
+    const result = await app.request(new URL(path, 'http://127.0.0.1:8788').href, init)
+    if (init?.method === 'PATCH' && !failed) { failed = true; return Response.json({ success: true }) }
+    return result
+  })
+  const user = userEvent.setup(); render(<App />)
+  await user.click(await screen.findByRole('button', { name: 'Add restriction' }))
+  await user.click(screen.getByRole('button', { name: 'Save draft' }))
+  await screen.findByRole('button', { name: 'Check operation receipt' })
+  expect((screen.getByRole('button', { name: 'Save draft' }) as HTMLButtonElement).disabled).toBe(true)
+  expect(screen.getByLabelText('Location description')).toBeTruthy()
+  await user.click(screen.getByRole('button', { name: 'Check operation receipt' }))
+  await screen.findByText('The accepted operation was recovered.')
+  expect(store.list('sandbox')[0].revision).toBe(1)
+})

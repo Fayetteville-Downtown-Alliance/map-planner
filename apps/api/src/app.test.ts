@@ -64,3 +64,16 @@ it('rejects invalid time windows without updating a saved revision', async () =>
   expect((await request(`organizations/sandbox/events/${created.id}/plan`, 'PATCH', { expectedRevision: 0, plan: invalid })).status).toBe(400)
   expect(store.get('sandbox', created.id).revision).toBe(0)
 })
+it('bounds repeated source inspections without accepting arbitrary URLs or making writes', async () => {
+  let fetches = 0
+  const metadataApp = createApp(store, { sandbox: true, fetcher: async () => {
+    fetches++
+    return Response.json({ name: 'Synthetic schema', geometryType: 'esriGeometryPoint', fields: [] })
+  } })
+  for (let i = 0; i < 20; i++) expect((await metadataApp.request('http://127.0.0.1:8788/api/v1/reference-sources/fayetteville-streets/metadata')).status).toBe(200)
+  const limited = await metadataApp.request('http://127.0.0.1:8788/api/v1/reference-sources/fayetteville-streets/metadata')
+  expect(limited.status).toBe(429)
+  expect(limited.headers.get('Retry-After')).toBe('60')
+  expect(fetches).toBe(20)
+  expect(store.list('sandbox')).toEqual([])
+})

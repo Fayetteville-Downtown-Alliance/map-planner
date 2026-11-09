@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process'
 const children = [
-  spawn(process.execPath, ['--import', 'tsx', 'apps/api/src/server.ts'], { stdio: 'inherit', env: { ...process.env, LOCAL_SANDBOX: '1' } }),
+  spawn(process.execPath, ['--watch', '--import', 'tsx', 'apps/api/src/server.ts'], { stdio: 'inherit', env: { ...process.env, LOCAL_SANDBOX: '1' } }),
   spawn(process.execPath, ['node_modules/vite/bin/vite.js', '--config', 'apps/web/vite.config.ts'], { stdio: 'inherit' }),
 ]
 let stopping = false

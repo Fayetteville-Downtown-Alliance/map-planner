@@ -24,3 +24,14 @@ November 9, 2026. Work branch: `planning/standalone-migration`. Original code, s
 Use only on loopback with synthetic data. Real authentication/capabilities, service identities, external data rights, private source handling, GIS imports, partial geometries, business matching, exports, subscriptions, backup/restore operations and production acceptance are not complete. No physical iPhone/Android, software keyboard, assistive-technology or GIS desktop-client success is claimed.
 
 See [ADR 001](adr-001-local-sandbox.md) for local-only decisions and [the roadmap](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/1) for the full requirement set. Closing the bootstrap issue must not be interpreted as closing these independent workstreams.
+
+## Follow-up validation and recovery fixes
+
+- Added runtime record-shape validation before accepting a write response. Malformed success responses preserve the pending command/draft until receipt reconciliation. Server 5xx responses also reconcile instead of assuming failure.
+- Added MapLibre 6's explicit Vite-emitted worker URL and a positive map-ready case; the earlier failure-only coverage could not prove actual rendering. Browser tests use a fresh known event per case so persisted events cannot make locator counts/order nondeterministic.
+- Added metadata inspection rate limiting, an API watcher for development, and a 404/no-store response for unknown hashed asset paths rather than a cached HTML fallback.
+- Follow-up source checks passed 21 tests in five files; the built app passed nine browser cases across desktop Chromium, phone Chromium and phone WebKit, including 320px, reduced motion, deliberate renderer failure, actual bundled worker/map rendering and save/recover/publish/edit/withdraw against the real loopback SQLite API. Added explicit missing-asset HTTP assertions to the positive-render scenario.
+- Reviewed generated desktop and 320px screenshots. Physical devices, soft keyboard, assistive technology, 200% text and installed-client update scenarios remain unverified.
+- Production dependency audit reported zero vulnerabilities for the locked installed runtime dependencies. This does not establish a comprehensive security audit.
+
+- The implemented metadata adapter also completed three live read-only checks against the exact approved City sources (street centerlines, address points and curb zones). Each returned its expected geometry type, EPSG:2264 and a sanitized field schema; rights remain unreviewed. No feature rows were imported.

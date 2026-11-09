@@ -1,4 +1,9 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type APIRequestContext } from '@playwright/test'
+async function createFixture(request: APIRequestContext, title: string) {
+  const response = await request.post('/api/v1/organizations/sandbox/events', { headers: { 'X-Map-Planner-Sandbox': '1', 'Idempotency-Key': crypto.randomUUID() }, data: { title, date: '2026-11-20', regionId: 'demo-east' } })
+  expect(response.status()).toBe(201)
+  return (await response.json()).id as string
+}
 test.beforeEach(async ({ page }) => {
   page.on('dialog', dialog => dialog.accept())
   // Tests exercise real loopback API/database; no upstream City/provider requests.
@@ -40,14 +45,28 @@ test('synthetic plan saves, recovers its draft, publishes a snapshot and withdra
   const withdrawn = await request.get('/api/v1/public/sandbox/closures?format=geojson')
   expect((await withdrawn.json()).features.some((f: { properties: { eventId: string } }) => f.properties.eventId === event.id)).toBe(false)
 })
-test('320px layout keeps written controls usable with reduced motion and map failure', async ({ page }) => {
+test('320px layout keeps written controls usable with reduced motion and map failure', async ({ page, request }) => {
+  const id = await createFixture(request, 'Small-screen failure fixture')
   await page.setViewportSize({ width: 320, height: 780 })
   await page.addInitScript(() => { HTMLCanvasElement.prototype.getContext = () => null })
-  await page.goto('/')
+  await page.goto(`/?event=${id}`)
   await expect(page.getByRole('button', { name: 'Add restriction' })).toBeVisible()
   await page.getByRole('button', { name: 'Add restriction' }).click()
   await expect(page.getByLabel('Location description')).toBeVisible()
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await expect(page.getByText(/This browser cannot display|Map rendering is unavailable|map component could not load/)).toBeVisible()
   await page.screenshot({ path: `test-results/${test.info().project.name}-320px.png`, fullPage: true })
+})
+
+test('renders the actual bundled map and local worker before editing', async ({ page, request }) => {
+  const id = await createFixture(request, 'Working map fixture')
+  await page.goto(`/?event=${id}`)
+  await expect(page.locator('.map-figure')).toHaveAttribute('data-map-state', 'ready')
+  const missing = await request.get('/assets/does-not-exist.js')
+  expect(missing.status()).toBe(404)
+  expect(missing.headers()['cache-control']).toBe('no-store')
+  await page.getByRole('button', { name: 'Add restriction' }).click()
+  await expect(page.locator('.map-figure')).toHaveAttribute('data-map-state', 'ready')
+  await expect(page.getByLabel('Location description')).toBeVisible()
+  await page.screenshot({ path: `test-results/${test.info().project.name}-map-ready.png`, fullPage: true })
 })

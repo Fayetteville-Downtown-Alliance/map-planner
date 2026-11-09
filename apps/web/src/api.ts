@@ -1,4 +1,5 @@
-import type { EventRecord, Region } from '@map-planner/domain'
+import { planSchema, eventInputSchema, type EventRecord, type Region } from '@map-planner/domain'
+import { z } from 'zod'
 export type Source = { id: string; name: string; url: string }
 export type Session = { organizationId: string; mode: string; regions: Region[]; referenceSources: Source[] }
 export class ApiError extends Error {
@@ -15,7 +16,13 @@ export async function read<T>(path: string, signal?: AbortSignal): Promise<T> {
   return result as T
 }
 export type PendingCommand = { id: string; path: string; method: string; body: unknown }
-export function receipt(id: string) { return read<EventRecord>(`/api/v1/organizations/sandbox/operations/${encodeURIComponent(id)}`) }
+const recordSchema = eventInputSchema.extend({ id: z.string().uuid(), organizationId: z.literal('sandbox'), revision: z.number().int().nonnegative(), plan: planSchema, publication: z.object({ version: z.number().int().nonnegative(), publishedAt: z.string(), plan: planSchema }).nullable() }).strict()
+function acceptedRecord(value: unknown): EventRecord {
+  const result = recordSchema.safeParse(value)
+  if (!result.success) throw new ApiError('unknown_outcome', 'The accepted record could not be verified. Keep your draft and check its receipt.')
+  return result.data
+}
+export async function receipt(id: string) { return acceptedRecord(await read<unknown>(`/api/v1/organizations/sandbox/operations/${encodeURIComponent(id)}`)) }
 export async function command(pending: PendingCommand): Promise<EventRecord> {
   let response: Response
   try {
@@ -30,5 +37,5 @@ export async function command(pending: PendingCommand): Promise<EventRecord> {
     try { return await receipt(pending.id) } catch { throw new ApiError('unknown_outcome', 'The server could not confirm the write. Check its receipt before saving again.') }
   }
   if (!response.ok) throw new ApiError(value.error?.code ?? 'request_failed', value.error?.message ?? 'The request failed. Keep your draft.', response.status)
-  return value
+  return acceptedRecord(value)
 }

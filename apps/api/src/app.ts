@@ -71,8 +71,13 @@ export function createApp(store: PlannerStore, options: { sandbox: boolean; fetc
     if (c.req.header('If-None-Match') === etag) return c.body(null, 304)
     return c.body(content, 200, { 'Content-Type': query.format === 'geojson' ? 'application/geo+json; charset=utf-8' : 'application/json; charset=utf-8' })
   })
+  const inspections: number[] = []
   app.get('/api/v1/reference-sources/:source/metadata', async c => {
     if (!referenceSources.some(s => s.id === c.req.param('source'))) return c.json({ error: { code: 'not_found', message: 'Unknown approved source.' } }, 404)
+    const now = Date.now()
+    while (inspections.length && inspections[0] < now - 60_000) inspections.shift()
+    if (inspections.length >= 20) { c.header('Retry-After', '60'); return c.json({ error: { code: 'source_rate_limit', message: 'Metadata inspections are limited to 20 per minute in this sandbox. Try again in one minute.' } }, 429) }
+    inspections.push(now)
     try { return c.json(await inspectLayer(c.req.param('source'), options.fetcher)) }
     catch { return c.json({ error: { code: 'source_unavailable', message: 'Source metadata could not be read. Your plan is unchanged; try again later.' } }, 502) }
   })
