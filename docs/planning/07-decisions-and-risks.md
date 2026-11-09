@@ -8,7 +8,7 @@
 - D04: Preserve existing schema/geometry semantics until a versioned migration is tested; keep uncertain/unmapped facts reviewable.
 - D05: Separate publication, private source review, AI import and outbound notifications. Disable real delivery by default.
 - D06: Proposed immutable published versions require explicit review/publish after draft edits. This is a deliberate behavior change from current DTA source.
-- D07: No DTA deployment, data cutover or remote push as part of this planning baseline. Local commits and a planning tag are the deliverables.
+- D07: The original baseline made local commits/tag only. Superseded for Git publication by the November 9 follow-up request: push the baseline/tag, create GitHub work issues and a working branch. DTA deployment and data cutover remain outside this work.
 
 ## Open decisions before their dependent phases
 

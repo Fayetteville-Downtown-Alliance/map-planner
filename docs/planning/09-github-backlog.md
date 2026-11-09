@@ -1,0 +1,38 @@
+# GitHub implementation backlog
+
+Created November 9, 2026. GitHub issues are the current work/status tracker; this index maps them back to the requirements. All application work was open/not started when created.
+
+- Repository: [Fayetteville-Downtown-Alliance/map-planner](https://github.com/Fayetteville-Downtown-Alliance/map-planner).
+- Working branch: [`planning/standalone-migration`](https://github.com/Fayetteville-Downtown-Alliance/map-planner/tree/planning/standalone-migration).
+- Roadmap: [#1](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/1).
+- Original reviewed planning tag: `planning-baseline-2026-11-09` (unchanged).
+
+P0 gates the standalone pilot, P1 covers broader rollout or optional integrations, and P2 covers later expansion. Issue bodies include scope, acceptance criteria and linked prerequisites. Dependencies are documented links, not native GitHub blocking relationships. No implementation assignees or deadlines have been invented.
+
+| Work item | Priority | Requirements | Dependencies |
+|---|---|---|---|
+| [[M1] Resolve source rights, pilot scope and architecture decisions](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/2) | P0 | R01, R08, R28 | Planning baseline |
+| [[M1] Bootstrap an isolated web, API and domain workspace](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/3) | P0 | R01, R28 | [#2](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/2) |
+| [[M2] Extract closure validation, geometry and regional time semantics](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/4) | P0 | R05, R06, R07, R09, R10, R16, R20 | [#3](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/3) |
+| [[M3] Add organization-scoped identity and capability enforcement](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/5) | P0 | R02, R03, R26 | [#4](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/4) |
+| [[M3] Implement events, immutable plan versions and conflict-safe saves](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/6) | P0 | R04, R11, R16, R26 | [#5](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/5) |
+| [[M4] Add versioned City GIS and OSM regional reference adapters](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/7) | P0 | R06, R07, R08, R20 | [#4](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/4), [#2](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/2) |
+| [[M4] Build the accessible map editor and recoverable draft workflow](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/8) | P0 | R04, R05, R06, R07, R09, R10, R11, R12, R16 | [#6](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/6), [#7](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/7) |
+| [[M3–M4] Store private source attachments and reviewed citations](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/9) | P0 | R02, R13, R26 | [#5](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/5), [#6](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/6) |
+| [[M5] Separate review, versioned publication and withdrawal](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/10) | P0 | R15, R16, R19, R26 | [#8](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/8), [#9](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/9) |
+| [[M5] Build public day pages, JSON/GeoJSON API and sharing metadata](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/11) | P0 | R17, R20, R25 | [#10](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/10) |
+| [[M4–M5] Add complete exports and retryable map rendering](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/12) | P0 | R18, R19 | [#8](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/8), [#10](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/10) |
+| [[M6] Add optional reviewed OCR and map-import jobs](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/13) | P1 | R14 | [#8](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/8), [#9](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/9), [#10](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/10) |
+| [[M7] Add directory impact candidates and reviewed parking access](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/14) | P1 | R21, R22 | [#7](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/7), [#6](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/6), [#10](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/10) |
+| [[M7] Add versioned calendar/program integration with one editing authority](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/15) | P1 | R23 | [#6](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/6), [#10](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/10) |
+| [[M7] Implement explicit, reviewed and idempotent notifications](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/16) | P1 | R24 | [#10](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/10), [#5](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/5) |
+| [[M7] Add aggregate analytics and bounded retention](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/17) | P1 | R27 | [#11](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/11), [#5](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/5) |
+| [[M1–M8] Establish security, mobile and operational release gates](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/18) | P0 | R02, R12, R26, R28 | [#3](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/3) |
+| [[M8] Reconcile live source and run a read-only shadow migration pilot](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/19) | P0 | R01, R15, R17, R18, R20, R28 | [#11](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/11), [#12](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/12), [#18](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/18) |
+| [[M9] Benchmark multi-tenant regional scale and plan rollout capacity](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/20) | P2 | R02, R08, R20, R28 | [#19](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/19) |
+
+All R01–R28 requirements are covered above. Optional deferred scope must be recorded explicitly for a release; issue closure alone does not prove production acceptance.
+
+Next ready work is #2 (decisions); #3 (bootstrap) follows it. Operations #18 starts after bootstrap and continues throughout implementation. Keep the roadmap checklist current as work issues close.
+
+The original two planning commits and their tag were pushed to `main` at the user’s request. This backlog index is a follow-up on `planning/standalone-migration`. Source application files, real data and infrastructure remain untouched.

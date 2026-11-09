@@ -10,6 +10,7 @@ Reviewed November 9, 2026. Owner: Fayetteville Downtown Alliance; individual imp
 6. [Verification and release checklist](06-verification.md)
 7. [Decisions, risks and open questions](07-decisions-and-risks.md)
 8. [Work log](08-work-log.md)
+9. [GitHub implementation backlog](09-github-backlog.md)
 
 `source-manifest.json` pins source file hashes for future selective copying. Source paths in these documents are relative to `~/Git/dta`; target paths are proposals relative to this repository unless stated otherwise. The manifest is a discovery inventory, not a complete dependency closure or permission to copy every listed file.
 

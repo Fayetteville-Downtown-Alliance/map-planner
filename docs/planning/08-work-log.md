@@ -27,3 +27,12 @@ Second commit: requirements, architecture, delivery plan, verification/decision 
 ### Next work
 
 M1: clarify reusable source/data rights, select backend/pilot parameters, bootstrap an isolated runnable workspace. Then port the domain and a synthetic vertical slice. Signed-in read-only walkthrough and live-source reconciliation remain open. No implementation milestone beyond M0 is complete.
+
+## November 9, 2026 — published planning and implementation backlog
+
+- User explicitly requested pushing the planning work/tag, creating feature/work issues on `Fayetteville-Downtown-Alliance/map-planner`, and making a branch.
+- Pushed original commits `5f1e938` and `84b505b` to `origin/main`, plus annotated tag `planning-baseline-2026-11-09`; remote main and peeled tag both resolved to `84b505bcc002b0c19bdca6acd7899274fcb762dd` at verification.
+- Created/pushed `planning/standalone-migration` and added this follow-up backlog documentation there; the original tag is unchanged.
+- Created roadmap #1 and 19 work issues (#2–#20), with P0/P1/P2 labels, acceptance criteria, linked dependencies and full R01–R28 coverage. Existing issue list was empty before creation. No assignees or deadlines were invented.
+- Updated the local planning index with the linked GitHub backlog and clarified the superseded no-push decision. No source application implementation, production mutation, email send, data migration or deployment was performed.
+- Re-ran planning link/hash checks and whitespace validation. Final remote issue and branch checks verify the published state; this follow-up does not rerun the source tests or claim new application test coverage.
