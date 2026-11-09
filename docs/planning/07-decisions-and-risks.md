@@ -45,3 +45,12 @@ These are recorded decision points, not claims of user approval or questions blo
 ## Unverified runtime facts
 
 Current deployed revision, provider inbox validity/delivery, production import success, actual public dataset coverage, geographic permissions, performance/cost envelope and physical-device usability all require fresh evidence. Existing dated DTA release receipts do not close these items for Map Planner.
+
+## Engineering/GIS decision extension — November 9, 2026
+
+- D08: Add R29–R34 for read-only ArcGIS adapters, business-location/parcel/entrance crosswalks, developer contracts, scoped machine access, optional change subscriptions and actual GIS-client acceptance.
+- D09: Use source-qualified dataset/layer/version identities; City MapServer, hosted FeatureServer and OSM identifiers are not interchangeable. Resolve the authoritative/current parking layer before importing it.
+- Q10: Identify the intended viewer app ID and any more complete/current business dataset. The supplied URL is a viewer base path; the discovered Wi-Fi survey is partial and downtown land-use collection is historical.
+- Q11: Verify per-source rights, feature currency, address/parcel key semantics and coordinate transformations before production import or engineering accuracy claims.
+
+Research and bounded query receipts are in [engineering/GIS integrations](10-engineering-gis-integrations.md). No active City business registry or verified business-entrance network was established.

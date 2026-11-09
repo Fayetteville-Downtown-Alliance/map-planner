@@ -57,3 +57,12 @@ Unchecked items are future app acceptance, not current successes.
 ## Commands available now
 
 `python3 scripts/verify-planning.py` checks local Markdown links, pinned manifest hashes and source revision when the DTA checkout exists. It makes no network requests or production changes. There are no app build/run/deploy commands in Map Planner yet.
+
+## Engineering/GIS acceptance extension
+
+- [ ] MapServer and FeatureServer contract fixtures cover metadata, CRS, pagination/transfer limits, short/empty pages with more results, JSON errors on HTTP 200, schema drift, deletion and source failure.
+- [ ] Allowlisted source/redirects reject SSRF and never forward service credentials; field allowlists exclude private/irrelevant parcel-owner and tax fields.
+- [ ] Business/location/parcel/entrance joins preserve ambiguous suites, relocations and many-to-many relationships; source IDs survive crosswalk/republication review.
+- [ ] Bbox/time/cursor queries remain within one declared snapshot; revocable machine credentials cannot publish/notify or access another tenant/project.
+- [ ] TypeScript/Python/curl examples run against a synthetic sandbox; GIS client checks record QGIS/ArcGIS Pro versions, CRS and transformation/precision limits.
+- [ ] Change cursor expiry, withdrawal, resync and signed webhook retry/deduplication tests pass before subscriptions are enabled.

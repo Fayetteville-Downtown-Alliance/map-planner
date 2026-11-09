@@ -31,8 +31,20 @@ P0 gates the standalone pilot, P1 covers broader rollout or optional integration
 | [[M8] Reconcile live source and run a read-only shadow migration pilot](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/19) | P0 | R01, R15, R17, R18, R20, R28 | [#11](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/11), [#12](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/12), [#18](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/18) |
 | [[M9] Benchmark multi-tenant regional scale and plan rollout capacity](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/20) | P2 | R02, R08, R20, R28 | [#19](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/19) |
 
-All R01–R28 requirements are covered above. Optional deferred scope must be recorded explicitly for a release; issue closure alone does not prove production acceptance.
+The original R01–R28 requirements are covered above. R29–R34 extend the backlog below. Optional deferred scope must be recorded explicitly for a release; issue closure alone does not prove production acceptance.
 
 Next ready work is #2 (decisions); #3 (bootstrap) follows it. Operations #18 starts after bootstrap and continues throughout implementation. Keep the roadmap checklist current as work issues close.
 
 The original two planning commits and their tag were pushed to `main` at the user’s request. This backlog index is a follow-up on `planning/standalone-migration`. Source application files, real data and infrastructure remain untouched.
+
+## Engineering/GIS integration extension
+
+Researched November 9, 2026: [verified sources and engineering API design](10-engineering-gis-integrations.md). Roadmap #1 now links 24 work issues (#2–#25), covering R01–R34. All five new issues were open/not started when created; related issues #7, #11, #14 and #18 link this extension.
+
+| Work item | Priority | Requirements | Dependencies |
+|---|---|---|---|
+| [[M4] Add read-only ArcGIS discovery and reference ingestion](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/21) | P0 | R29 | [#7](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/7), [#3](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/3) |
+| [[M7] Link businesses to reviewed addresses, parcels and entrances](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/22) | P1 | R30 | [#14](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/14), [#21](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/21) |
+| [[M3–M5] Publish engineering API contracts and scoped machine access](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/23) | P0 | R31, R32 | [#5](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/5), [#11](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/11) |
+| [[M7] Add replayable publication changes and optional signed webhooks](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/24) | P1 | R33 | [#10](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/10), [#23](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/23) |
+| [[M7] Verify QGIS and ArcGIS Pro interoperability and coordinate handling](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/25) | P1 | R34 | [#12](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/12), [#23](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/23) |

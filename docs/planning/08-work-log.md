@@ -36,3 +36,14 @@ M1: clarify reusable source/data rights, select backend/pilot parameters, bootst
 - Created roadmap #1 and 19 work issues (#2–#20), with P0/P1/P2 labels, acceptance criteria, linked dependencies and full R01–R28 coverage. Existing issue list was empty before creation. No assignees or deadlines were invented.
 - Updated the local planning index with the linked GitHub backlog and clarified the superseded no-push decision. No source application implementation, production mutation, email send, data migration or deployment was performed.
 - Re-ran planning link/hash checks and whitespace validation. Final remote issue and branch checks verify the published state; this follow-up does not rerun the source tests or claim new application test coverage.
+
+## November 9, 2026 — engineer-facing service and City ArcGIS research
+
+- Investigated the supplied Fayetteville viewer base URL. Its missing app ID prevents identification of the exact configured viewer; anonymous portal metadata identified City organization `j3zNT485kmwrBtMJ`.
+- Read public service/layer metadata for streets, address points, parcels, zoning, sidewalks and parking. Verified schema differences between DTA's hosted road source and City MapServer, plus a newer public parking map linking curb zones/spaces/facilities/devices.
+- Anonymous bounded count queries in an explicitly recorded downtown test box returned 867 address points, 1,204 parcels and 77 curb zones. One allowlisted street GeoJSON query returned a LineString in WGS84. No feature records, parcel-owner data, contacts or credentials were retained in the repository.
+- Identified a partial Wi-Fi business survey schema and a downtown land-use feature collection last modified in 2018; neither was accepted as an authoritative current business directory. Source rights, completeness, business identity/entrances and engineering accuracy remain unverified.
+- Added source-linked research/metadata receipts and R29–R34: ArcGIS read-only adapter, reviewed business/location/parcel joins, developer API contracts, scoped machine identities, change subscriptions and GIS interoperability.
+- Created issues #21–#25, updated roadmap #1 and related #7/#11/#14/#18, and extended the local backlog index. No issue/application implementation is claimed.
+- Validated local document links, unchanged DTA source hashes, JSON evidence structure, requirement-to-issue coverage and whitespace. This is a documentation-only change; no app build/test, GIS-client visual acceptance or production import/deployment occurred.
+- Commit/tag this extension on `planning/standalone-migration`; annotated tag `planning-engineering-2026-11-09` identifies the accepted planning source, not deployed software. Preserve the original baseline tag.

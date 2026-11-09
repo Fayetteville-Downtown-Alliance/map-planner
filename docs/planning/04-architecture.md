@@ -67,3 +67,9 @@ These are synthetic evaluation envelopes, not forecasts or measured capacity:
 Provisional pilot target: p95 public cached reads under 500 ms and ordinary saves under 1 s excluding network/provider/import work; zero unauthorized cross-tenant reads/writes. Measure from a specified test region and publish warm/cold/cache-hit conditions and failure rates. Choose availability/SLO, RPO/RTO, retention and budget with the operator before production; there is no current SLA.
 
 Long work uses durable jobs and bounded leases/retries. Result installation checks the original plan/source revision, so late work cannot replace a newer result. Delivery requires an outbox/receipt ledger; ambiguous provider outcomes reconcile before retry. Observe job age/failures, stale renders, source-check failures, tenant throttles, public-feed errors and missing reference coverage.
+
+## Engineering/GIS integration extension
+
+[The engineering integration plan](10-engineering-gis-integrations.md) adds a source catalog, read-only ArcGIS MapServer/FeatureServer adapters, source-qualified identity crosswalks, many-to-many business-location/parcel/entrance links, and scoped integration identities. Extend the public API with bounded bbox/time queries and consistent paginated snapshots, plus a separate authorized draft API. Publish contracts and a synthetic developer sandbox. Change-feed/webhook and GIS-client interoperability requirements are R29–R34; they are proposed capabilities, not existing endpoints.
+
+Add `reference_sources`, `reference_snapshots`, `external_feature_links`, `business_locations`, `location_parcel_links`, `entrances`, `integration_identities` and optional `publication_changes`/`webhook_subscriptions` to the model as their phases land. Preserve tenant scope and field-level public projections throughout.

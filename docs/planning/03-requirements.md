@@ -44,6 +44,19 @@ All unchecked items are implementation work. “Existing” means DTA source beh
 | R27 | P1 | Existing | Privacy-conscious aggregate analytics with closed vocabulary, retention and error visibility; no person-level tracking required. |
 | R28 | P0 | New | Operations: own environments, schema migrations, backup/restore drill, rate/size/concurrency limits, job retries/dead letters, served-build verification and rollback. |
 
+## Engineering integration extension — November 9, 2026
+
+The following adds requirements without renumbering R01–R28. Source research, workflow and exact interfaces are in [engineering/GIS integrations](10-engineering-gis-integrations.md). All are proposed and unimplemented.
+
+| ID | Priority | Requirement and acceptance |
+|---|---|---|
+| R29 | P0 | Read-only ArcGIS connector: resolve items/layers, record schema/CRS/provenance/rights, use field allowlists and bounded complete pagination, detect JSON errors/schema drift, retain last accepted snapshot and reject SSRF redirects. Verify both MapServer and FeatureServer fixtures. |
+| R30 | P1 | Reviewable business-location/address/parcel/entrance crosswalk: many-to-many/time-versioned links, suite and relocation ambiguity, verified source-qualified identifiers, candidate impacts distinct from reviewed access. Owner records never stand in for business contacts. |
+| R31 | P0 | Engineering API/catalog: versioned layers and OpenAPI/JSON Schema, bounded bbox/time queries, cursor/snapshot consistency, explicit CRS/freshness/attribution, synthetic examples and documented errors/rate/version policy. |
+| R32 | P0 | Scoped machine integration identities: revocable tenant/project permissions, separate published-read/project-read/draft-write, idempotency/revision/receipt for draft writes, no implicit publish/notify or raw-source grant. |
+| R33 | P1 | Replayable published-change/withdrawal feed and optional signed webhooks: cursor retention/resync, versioned payloads, retry/deduplication and subscription isolation; polling works independently. |
+| R34 | P1 | Demonstrated GIS-client interoperability and explicit CRS/transformation metadata: load published output in QGIS and ArcGIS Pro; test stable IDs/status/time/null geometry/attribution and document any export precision loss. Evaluate additional formats/protocols only with tested contracts. |
+
 ## Existing limits to preserve until deliberately revised
 
 Version-1 plan validator: 32 restrictions/plan, 2,000 general-note characters, 800 access-note characters, 500 source-URL characters. Detours: 400 characters and 12 reference segments. Parking review notes: 300 characters. Image import: up to five PNG/JPEG/WebP images, 4 MiB combined; up to six detail views with a separate 4 MiB total; pasted source text up to 20,000 characters. Review actual server caps before extraction; do not silently inflate them for “scale.”

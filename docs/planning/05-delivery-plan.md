@@ -36,3 +36,7 @@ Planning baseline is complete; application phases below are not started. Each ph
 ## Commit discipline
 
 Use small coherent commits: evidence → domain → API → UI → publication → integrations. Commit only this task's files; preserve unrelated changes. Record source/build identity, exact test scope and open issues. Planning tags describe documentation only, never production deployment. No push, deployment or real-data migration has been performed by this baseline.
+
+## Engineering integration workstream
+
+R29–R34 extend this plan: M3 defines scoped machine identities; M4 adds ArcGIS read-only discovery/import and source-qualified reference IDs; M5 adds engineering API/catalog/bbox/snapshot contracts; M7 adds business-location crosswalks, published-change subscriptions and GIS-client acceptance. See [the engineering/GIS plan](10-engineering-gis-integrations.md) and [linked work issues](09-github-backlog.md). No connector writes back to City GIS, and publicly visible edit capabilities do not authorize writes.
