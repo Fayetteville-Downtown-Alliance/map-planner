@@ -74,3 +74,9 @@ Thumbs.db
 .claude/settings.local.json
 .claude/*.lock
 .claude/worktrees/
+
+# Standalone local sandbox records
+.data/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

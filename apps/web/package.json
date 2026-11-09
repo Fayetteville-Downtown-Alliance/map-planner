@@ -1,0 +1,12 @@
+{
+  "name": "@map-planner/web",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@map-planner/domain": "*",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "maplibre-gl": "6.17.0",
+    "zod": "4.6.7"
+  }
+}

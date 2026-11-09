@@ -1,0 +1,38 @@
+{
+  "name": "map-planner",
+  "version": "0.1.0-alpha.1",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=24.0.0 <27"
+  },
+  "scripts": {
+    "dev": "tsx scripts/dev.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:browser": "playwright test",
+    "build": "npm run typecheck && vite build --config apps/web/vite.config.ts && esbuild apps/api/src/server.ts --bundle --platform=node --format=esm --external:hono --external:hono/* --external:@hono/node-server --external:zod --external:@js-temporal/polyfill --outfile=dist/api/server.js",
+    "preview:sandbox": "LOCAL_SANDBOX=1 node dist/api/server.js",
+    "check": "npm run typecheck && npm test && npm run build",
+    "check:planning": "python3 scripts/verify-planning.py"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "esbuild": "0.28.2",
+    "jsdom": "31.0.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.7",
+    "vitest": "5.1.0"
+  }
+}
