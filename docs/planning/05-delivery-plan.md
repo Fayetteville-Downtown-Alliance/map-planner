@@ -1,6 +1,6 @@
 # Delivery plan
 
-Planning baseline is complete; application phases below are not started. Each phase must end with a reviewable commit, verification evidence and a work-log update. Tag accepted milestones with annotated tags; never move existing tags. This document sets dependencies, not a calendar promise.
+The planning baseline is complete. This table records the original phase plan; the local bootstrap is now implemented and other phases are partial. See [current implementation coverage](../implementation/status.md) and GitHub issues for live status. Each phase must end with a reviewable commit, verification evidence and a work-log update. Tag accepted milestones with annotated tags; never move existing tags. This document sets dependencies, not a calendar promise.
 
 | Phase | Work and deliverable | Depends on | Completion gate | Suggested commit/tag |
 |---|---|---|---|---|

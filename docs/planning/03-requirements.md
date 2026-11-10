@@ -1,6 +1,6 @@
 # Product requirements
 
-All unchecked items are implementation work. “Existing” means DTA source behavior to preserve, not implemented here. P0 gates the standalone pilot; P1 gates broader rollout; P2 is later expansion. Roles below are proposed tenant capabilities, not DTA global roles.
+This is the full acceptance scope; see [current implementation coverage](../implementation/status.md) for completed foundations and remaining work. All unchecked items are implementation work. “Existing” means DTA source behavior to preserve, not implemented here. P0 gates the standalone pilot; P1 gates broader rollout; P2 is later expansion. Roles below are proposed tenant capabilities, not DTA global roles.
 
 ## Users and journeys
 

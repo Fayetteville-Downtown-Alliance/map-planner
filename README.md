@@ -44,4 +44,6 @@ npm run preview:sandbox
 
 Full City/OSM imports, clipping/partial-reference editing, genuine tenant authentication, scoped machine access, uploads, advanced exports, business/parcel joins, change subscriptions and production operations remain on the [GitHub roadmap](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/1).
 
+GIS implementation research: [QGIS, OSM and current web GIS options](docs/research/2026-11-09-qgis-web-gis-options.md).
+
 See the [planning index](docs/planning/README.md), [local decisions](docs/implementation/adr-001-local-sandbox.md) and [implementation status](docs/implementation/status.md). DTA remains the operational system; no DTA secrets, contacts, database exports, source uploads or resource bindings are copied here.

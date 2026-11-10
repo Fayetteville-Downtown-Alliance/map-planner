@@ -54,3 +54,9 @@ Current deployed revision, provider inbox validity/delivery, production import s
 - Q11: Verify per-source rights, feature currency, address/parcel key semantics and coordinate transformations before production import or engineering accuracy claims.
 
 Research and bounded query receipts are in [engineering/GIS integrations](10-engineering-gis-integrations.md). No active City business registry or verified business-entrance network was established.
+
+## Implementation and GIS-stack follow-up — November 9, 2026
+
+- D10: Proceed with original code and fictitious reference data in a loopback-only Node/SQLite sandbox; production authentication, hosting and external data rights remain unresolved. See [ADR 001](../implementation/adr-001-local-sandbox.md). Q02 does not block writing new code; it still gates copying upstream DTA/application/data material.
+- D11: Treat QGIS as desktop engineering interoperability/analysis, OSM/City GIS as reference sources and the browser editor as its own component. Keep current MapLibre while issue #26 compares compatible drawing tools with OpenLayers. Optional QGIS Server/QWC2 is a distinct service decision.
+- D12: Prioritize PostGIS over D1 in the production spatial-backend evaluation because parcel/business/entrance joins and engineering data are now explicit requirements. No production backend, budget or infrastructure is approved/provisioned by that evaluation order.

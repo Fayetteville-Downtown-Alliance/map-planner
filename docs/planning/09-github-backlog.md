@@ -48,3 +48,9 @@ Researched November 9, 2026: [verified sources and engineering API design](10-en
 | [[M3–M5] Publish engineering API contracts and scoped machine access](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/23) | P0 | R31, R32 | [#5](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/5), [#11](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/11) |
 | [[M7] Add replayable publication changes and optional signed webhooks](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/24) | P1 | R33 | [#10](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/10), [#23](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/23) |
 | [[M7] Verify QGIS and ArcGIS Pro interoperability and coordinate handling](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/25) | P1 | R34 | [#12](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/12), [#23](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/23) |
+
+## Runnable sandbox and GIS stack comparison
+
+The first original synthetic sandbox is implemented; see [current implementation evidence and limits](../implementation/status.md). Issue creation state above is historical; GitHub issues hold current work status. The bootstrap is separate from production tenancy, full geometry editing and real data migration.
+
+[Issue #26](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/26) tracks the researched QGIS-compatible editor comparison (R06/R08/R29–R34). [The comparison](../research/2026-11-09-qgis-web-gis-options.md) recommends QGIS desktop interoperability, retaining the current MapLibre app during a Geoman/OpenLayers spike, and prioritizing PostGIS in the spatial backend evaluation. QGIS Server/QWC2 remains an optional project-publishing service. No extra GIS stack was installed/deployed by the research.

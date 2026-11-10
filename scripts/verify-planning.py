@@ -11,7 +11,7 @@ from urllib.parse import unquote
 root = Path(__file__).resolve().parents[1]
 errors = []
 links = 0
-for doc in [root / 'README.md', *sorted((root / 'docs/planning').glob('*.md'))]:
+for doc in [root / 'README.md', *sorted((root / 'docs').rglob('*.md'))]:
     for raw in re.findall(r'\[[^\]]*\]\(([^)]+)\)', doc.read_text()):
         target = raw.split('#', 1)[0]
         if not target or re.match(r'^[a-z]+:', target):
