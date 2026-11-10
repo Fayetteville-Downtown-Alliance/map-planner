@@ -6,7 +6,7 @@ function secure(response: Response): Response {
   result.headers.set('X-Content-Type-Options', 'nosniff')
   result.headers.set('X-Frame-Options', 'DENY')
   result.headers.set('Referrer-Policy', 'same-origin')
-  result.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; worker-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'")
+  result.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; worker-src 'self' blob:; connect-src 'self' data: blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'")
   return result
 }
 export default {

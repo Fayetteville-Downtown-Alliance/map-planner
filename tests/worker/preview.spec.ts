@@ -26,6 +26,8 @@ test('isolates browser workspaces, denies forged sessions and preserves transact
   } finally { await first.dispose(); await second.dispose() }
 })
 test('hosted preview edits, recovers, publishes and withdraws its own synthetic plan', async ({ page, context }) => {
+  const errors: string[] = []
+  page.on('pageerror', error => errors.push(error.message))
   await page.goto('/')
   await expect(page.getByText('Hosted preview', { exact: true })).toBeVisible()
   await expect(page.locator('.map-figure')).toHaveAttribute('data-map-state', 'ready')
@@ -48,5 +50,6 @@ test('hosted preview edits, recovers, publishes and withdraws its own synthetic 
   await page.getByRole('button', { name: 'Withdraw publication' }).click()
   await expect(page.getByText('Publication withdrawn. The saved draft remains available.')).toBeVisible()
   expect((await (await context.request.get('/api/v1/public/sandbox/closures?format=geojson')).json()).features).toHaveLength(0)
+  expect(errors).toEqual([])
   await page.screenshot({ path: `worker-test-results/${test.info().project.name}-hosted-preview.png`, fullPage: true, scale: 'css' })
 })
