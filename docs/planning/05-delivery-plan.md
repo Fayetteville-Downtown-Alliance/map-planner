@@ -35,7 +35,7 @@ The planning baseline is complete. This table records the original phase plan; t
 
 ## Commit discipline
 
-Use small coherent commits: evidence → domain → API → UI → publication → integrations. Commit only this task's files; preserve unrelated changes. Record source/build identity, exact test scope and open issues. Planning tags describe documentation only, never production deployment. The baseline and local sandbox are pushed on the work branch. No hosted deployment or real-data migration has been performed.
+Use small coherent commits: evidence → domain → API → UI → publication → integrations. Commit only this task's files; preserve unrelated changes. Record source/build identity, exact test scope and open issues. Planning tags describe documentation only, never production deployment. The baseline and local sandbox are pushed on the work branch. A separate synthetic Cloudflare preview is now deployed as recorded below; no real-data migration or production cutover has been performed.
 
 ## Engineering integration workstream
 

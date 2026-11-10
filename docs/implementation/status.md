@@ -1,6 +1,6 @@
 # Implementation status
 
-November 9, 2026. Work branch: `planning/standalone-migration`. Original code, synthetic records and reference geometry only. No hosted deployment or real-data migration.
+November 9, 2026. Work branch: `planning/standalone-migration`. Original code, synthetic records and reference geometry only. A separate [Cloudflare synthetic preview](https://map-planner-preview.wemea-5ahhf.workers.dev/) is now deployed; no real-data migration or production organizational rollout.
 
 ## First vertical slice
 
@@ -8,7 +8,7 @@ November 9, 2026. Work branch: `planning/standalone-migration`. Original code, s
 - Implemented part of domain/time work (#4): input validation, two regions, DST-gap/fold rejection, Point/LineString/null, overnight/parking-day overlap and public field projection. Source-bound partial-road clipping is now implemented as recorded below; full DTA schema parity and network topology are not complete.
 - Implemented part of events/version API (#6): durable event/plan history, atomic revision conflicts, operation receipts, separate publish/withdraw and explicit audit actor. The synthetic server-fixed workspace is not production tenancy/auth (#5).
 - Implemented initial editor/recovery (#8): named synthetic roads/points and written locations, device drafts, conflict comparison, explicit saved-plan review and unknown-outcome receipt checks. Source-bound partial-limit editing is now implemented as recorded below; generic sketches do not establish verified boundaries.
-- Implemented initial publication/public API (#10/#11): saved publication snapshot, draft/public separation, private-note exclusion, single-day JSON/GeoJSON and ETag/304. No public deployment, rich SEO or full engineering contract yet.
+- Implemented initial publication/public API (#10/#11): saved publication snapshot, draft/public separation, private-note exclusion, single-day JSON/GeoJSON and ETag/304. The hosted preview reader is scoped to its browser workspace; rich SEO and a full production engineering contract remain open.
 - Implemented first ArcGIS connector step (#21): allowlisted exact layer metadata, byte/time limit, redirect refusal, inert selected fields and error handling. Full discovery/import/pagination/schema migration remains open.
 - Added GitHub quality workflow with unit/integration/client, build and built-client browser steps. No production deployment workflow exists. Remote execution/branch protection is not established by this file alone.
 
@@ -21,7 +21,7 @@ November 9, 2026. Work branch: `planning/standalone-migration`. Original code, s
 
 ## Remaining release limits
 
-Use only on loopback with synthetic data. Real authentication/capabilities, service identities, external data rights, private source handling, GIS imports, real-data topology, business matching, exports, subscriptions, backup/restore operations and production acceptance are not complete. No physical iPhone/Android, software keyboard, assistive-technology or GIS desktop-client success is claimed.
+Use synthetic data only, either on loopback or in the separate browser-isolated Cloudflare preview. Do not expose the original Node server through a public proxy. Real authentication/capabilities, service identities, external data rights, private source handling, GIS imports, real-data topology, business matching, exports, subscriptions, backup/restore operations and production acceptance are not complete. No physical iPhone/Android, software keyboard, assistive-technology or GIS desktop-client success is claimed.
 
 See [ADR 001](adr-001-local-sandbox.md) for local-only decisions and [the roadmap](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/1) for the full requirement set. Closing the bootstrap issue must not be interpreted as closing these independent workstreams.
 
@@ -56,3 +56,10 @@ Added API-backed synthetic fixture generation, headless PyQGIS GeoPackage/GeoJSO
 [CI 42730611721](https://github.com/Fayetteville-Downtown-Alliance/map-planner/actions/runs/42730611721) passed both jobs at `cd6bfa6`: 26 source tests, 18 built-client browser cases (including actual desktop handle drag/cancel) and QGIS/PostGIS proofs with exact 25 metre boundary checks. Resource assertions prove the OpenLayers path loads its own CSS without MapLibre/Geoman. The [dated browser observations](../research/gis-browser-observations-2026-11-09.json) retain exact source/workload/measurement limits. Reviewed representative desktop and phone screenshots.
 
 Final follow-up adds canceled-import ownership and three browser recovery cases after WebGL failure/rapid renderer switches, making the full suite 21 browser cases. Those three cases passed locally across Chromium desktop/phone and phone WebKit. GIS checks additionally compare status/impact/direction, local/UTC/parking time values and source fields through the roundtrip, allowing OGR's addition of seconds. The annotated `v0.1.0-alpha.2` milestone tag will only be created after the final exact commit passes CI. The app remains a synthetic loopback sandbox; no deployment or full #25/#26 acceptance is implied.
+
+
+## Cloudflare preview release
+
+The user authorized a hosted preview. [ADR 003](adr-003-cloudflare-preview.md) implements its own Worker/static assets, per-browser SQLite Durable Objects, signed seven-day cookies, expiry cleanup, device-draft/pending-operation scope, rate/write limits and a CSP tested with all three renderers. The original Node SQLite adapter still works through the shared transactional core. New preview secrets/resources are independent of DTA; external GIS fetches and outbound delivery stay disabled.
+
+[Release receipt](cloudflare-preview-release.md): deployed `8ed769a`, 29 source tests, 21 original browser cases, four additional Workers browser/runtime cases and the independent GIS jobs passed in CI. The same four Workers cases passed against public TLS at the deployed URL, including map renderers, save/reload/publish/withdraw/private projection and independent-session/forged-cookie/receipt conflicts. Viewed the real deployed phone WebKit screenshot. Physical devices, real production identity/data, realistic scale and full operational/GIS-client acceptance are still open.

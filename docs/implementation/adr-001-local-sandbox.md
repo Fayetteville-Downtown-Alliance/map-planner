@@ -19,3 +19,7 @@ DTA source was still clean at `66a0ebc2510d4ffb0db403fdee10d378ddc57d42` during 
 Compared the [GOV.UK check-answers pattern](https://design-system.service.gov.uk/patterns/check-answers/) with [USWDS form templates](https://designsystem.digital.gov/templates/form-templates/) on November 9, 2026. Adapted the separation of editing, readable review and a distinct final action, with inline errors and visible labels. These were interaction references, not imported component code/styles. New visual tokens use a restrained slate/teal work surface, 18px body text, 48px controls and responsive form/list layout. No new animation or motion dependency is used.
 
 Run domain/API/database/client tests, built-client browser workflow checks and local HTTP checks. Browser fixtures prohibit upstream traffic. Physical iPhone/Android, software-keyboard, assistive-technology, QGIS/ArcGIS Pro and production acceptance remain separate.
+
+## Authorized hosted-preview extension
+
+The user's subsequent request for a Cloudflare Worker preview is implemented separately in [ADR 003](adr-003-cloudflare-preview.md). Its isolated browser workspaces do not relax this original Node server's loopback guard or the production identity/data gates.

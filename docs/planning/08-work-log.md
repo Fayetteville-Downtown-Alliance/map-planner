@@ -94,3 +94,7 @@ Local source/type/build checks pass 29 tests. Four Workers-runtime/browser cases
 ### Hosted renderer CSP correction
 
 Extending the Worker browser test to load all three renderers exposed Geoman's use of fetch on an embedded PNG data URL, which `connect-src self` blocked. Allow local data/blob fetches while keeping external network hosts excluded; preserve positive map-ready assertions and add a no-page-errors check. The earlier four-case pass covered the default OpenLayers path; full comparison-renderer acceptance requires this follow-up.
+
+### Live Cloudflare acceptance
+
+Deployed clean source `8ed769a` with project-local `cf` beta.28 to [https://map-planner-preview.wemea-5ahhf.workers.dev/](https://map-planner-preview.wemea-5ahhf.workers.dev/); Worker version `f199558f-c201-4f84-af91-94bc2ebd182b`. Health returned the exact source and synthetic mode. CI run 42739123306 passed 29 source tests, 21 original browser cases, four local Workers cases and independent GIS checks. The same four Workers cases passed at the real HTTPS URL in desktop Chromium and phone WebKit, including all renderer CSP paths and persistence/publication/isolation. Reviewed the deployed phone screenshot. Committed the preview URL and receipt; a final same-namespace redeployment/read-back and annotated alpha.3 tag record the cross-version persistence receipt. No DTA service, data, credential or custom domain changed.

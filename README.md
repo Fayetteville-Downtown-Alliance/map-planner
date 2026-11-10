@@ -1,6 +1,6 @@
 # Map Planner
 
-Standalone street-closure planning and engineering GIS integration. An original, runnable **local synthetic sandbox** is implemented; production auth, real GIS imports and deployment are not yet available.
+Standalone street-closure planning and engineering GIS integration. An original **synthetic sandbox** runs locally and at the [Cloudflare preview](https://map-planner-preview.wemea-5ahhf.workers.dev/). Production identity, real GIS imports and operational rollout remain separate work.
 
 ## Run locally
 
@@ -54,6 +54,6 @@ For engineers, `npm run fixtures:gis` generates typed synthetic public GeoJSON i
 
 ## Cloudflare Worker preview
 
-A separate browser-isolated synthetic Worker preview is implemented. Each browser gets its own workspace, with seven-day expiry; preview publications are visible within that workspace. This does not enable production sign-in, real data or public organizational publishing.
+Open the [live Cloudflare Worker preview](https://map-planner-preview.wemea-5ahhf.workers.dev/). Each browser gets its own workspace, with seven-day expiry; preview publications are visible within that workspace. This does not enable production sign-in, real data or public organizational publishing.
 
-`npm run build:worker` creates Cloudflare Build Output; `npm run test:worker` exercises the real local Workers runtime over HTTPS. Deploy with the project-pinned `npx cf` and a newly generated preview signing secret. See [preview architecture, deployment and verification](docs/implementation/adr-003-cloudflare-preview.md). The deployment receipt will record the live URL and exact revision after verification.
+`npm run build:worker` creates Cloudflare Build Output; `npm run test:worker` exercises the real local Workers runtime over HTTPS. Deploy with the project-pinned `npx cf` and a newly generated preview signing secret. See [preview architecture, deployment and verification](docs/implementation/adr-003-cloudflare-preview.md). The [deployment receipt](docs/implementation/cloudflare-preview-release.md) records the live URL, tested revision and verification scope.
