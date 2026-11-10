@@ -4,7 +4,7 @@ import { PlanMap, type Engine } from './PlanMap'
 import type { Handles } from './maps/contract'
 
 export function ReferenceWorkbench({ region, plan, disabled, revision, onChange }: { region: Region; plan: Plan; disabled: boolean; revision: number; onChange(id: string, patch: Partial<Restriction>): void }) {
-  const [engine, setEngine] = useState<Engine>(() => { const value = new URLSearchParams(window.location.search).get('map'); return value === 'geoman' || value === 'openlayers' ? value : 'maplibre' }), [id, setId] = useState('')
+  const [engine, setEngine] = useState<Engine>(() => { const value = new URLSearchParams(window.location.search).get('map'); return value === 'geoman' || value === 'maplibre' ? value : 'openlayers' }), [id, setId] = useState('')
   const [start, setStart] = useState('0'), [end, setEnd] = useState('100'), [error, setError] = useState('')
   const [undo, setUndo] = useState<{ id: string; patch: Partial<Restriction> } | null>(null)
   const roads = useMemo(() => roadsFor(region), [region.id])
@@ -31,7 +31,7 @@ export function ReferenceWorkbench({ region, plan, disabled, revision, onChange 
     setStart(String(Number((limits[0].fraction*100).toFixed(4)))); setEnd(String(Number((limits[1].fraction*100).toFixed(4)))); setError('')
   }
   return <>
-    <div className="form-grid"><label>Map renderer<select value={engine} onChange={e => setEngine(e.target.value as Engine)}><option value="maplibre">MapLibre · current viewer</option><option value="geoman">MapLibre + Geoman Free · comparison</option><option value="openlayers">OpenLayers · comparison</option></select></label>
+    <div className="form-grid"><label>Map renderer<select value={engine} onChange={e => setEngine(e.target.value as Engine)}><option value="maplibre">MapLibre · current viewer</option><option value="geoman">MapLibre + Geoman Free · comparison</option><option value="openlayers">OpenLayers · reference limits</option></select></label>
       <label>Edit reference limits<select value={id} disabled={disabled} onChange={e => setId(e.target.value)}><option value="">View plan without editing limits</option>{plan.entries.filter(e => roads.some(r => r.id === e.referenceId && r.geometry.type === 'LineString')).map(e => <option key={e.id} value={e.id}>{e.label}</option>)}</select></label></div>
     <PlanMap region={region} plan={displayPlan} engine={engine} handles={handles} selectionId={id} onHandles={onHandles} />
     {road && entry && <fieldset disabled={disabled} className="limit-editor"><legend>Partial limits · {entry.label}</legend>

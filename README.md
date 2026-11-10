@@ -42,12 +42,12 @@ npm run preview:sandbox
 - JSON/GeoJSON snapshot API, ETags, and a limited API discovery document.
 - Read-only bounded metadata inspection of three allowlisted ArcGIS layers.
 
-Full City/OSM imports, clipping/partial-reference editing, genuine tenant authentication, scoped machine access, uploads, advanced exports, business/parcel joins, change subscriptions and production operations remain on the [GitHub roadmap](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/1).
+Full City/OSM imports, network topology, genuine tenant authentication, scoped machine access, uploads, advanced exports, business/parcel joins, change subscriptions and production operations remain on the [GitHub roadmap](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/1).
 
 GIS implementation research: [QGIS, OSM and current web GIS options](docs/research/2026-11-09-qgis-web-gis-options.md).
 
 See the [planning index](docs/planning/README.md), [local decisions](docs/implementation/adr-001-local-sandbox.md) and [implementation status](docs/implementation/status.md). DTA remains the operational system; no DTA secrets, contacts, database exports, source uploads or resource bindings are copied here.
 
-GIS work now includes source-bound partial-road limits and a renderer selector for the current MapLibre viewer, Geoman Free and OpenLayers comparison. Use a curved/reversed synthetic location, add a restriction, select it under **Edit reference limits**, preview percentages and apply them to the draft before saving. Map gestures never save or publish automatically.
+GIS work now includes source-bound partial-road limits and a renderer selector with OpenLayers as the local reference-limit editor and MapLibre/Geoman Free as comparison options. Use a curved/reversed synthetic location, add a restriction, select it under **Edit reference limits**, preview percentages and apply them to the draft before saving. Map gestures never save or publish automatically.
 
 For engineers, `npm run fixtures:gis` generates typed synthetic public GeoJSON in `test-results/gis/`. The dedicated CI GIS job checks PyQGIS/GeoPackage interchange and isolated PostGIS spatial queries. See [the GIS contract and runnable checks](docs/implementation/adr-002-source-bound-gis.md). No real data or production GIS service is enabled.

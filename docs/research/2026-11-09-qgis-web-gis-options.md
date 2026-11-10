@@ -81,3 +81,8 @@ Choose the simplest candidate that passes required editing, interoperability and
 - Make the comparison a tracked implementation issue linked to #7, #8, #21 and #25. It is not a reason to stall independent API/auth/domain work.
 - Move PostGIS ahead of D1 in the spatial backend evaluation now that business/parcel/entrance joins and engineering GIS are explicit priorities. This is an evaluation order, not a provisioned backend or approval of hosting costs.
 - Keep QGIS Desktop interoperability as a release acceptance requirement. A later QGIS Server/QWC2 project-publishing service is optional until an actual project/layout requirement justifies it.
+
+
+## Implementation follow-up
+
+The accepted next slice is implemented in [ADR 002](../implementation/adr-002-source-bound-gis.md): OpenLayers is the bounded source-limit editor default, MapLibre/Geoman Free remain comparison paths, source identity/limits are server checked, and QGIS/PostGIS have independent synthetic CI proofs. The initial research-only state and recommendation to retain MapLibre above are historical. No QGIS Server/QWC2 deployment, real feature import or production database migration has occurred. Desktop GIS and large-scale performance gates remain open.

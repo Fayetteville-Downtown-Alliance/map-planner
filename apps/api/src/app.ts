@@ -29,7 +29,7 @@ export function createApp(store: PlannerStore, options: { sandbox: boolean; fetc
     await next()
   })
   app.use('/api/*', bodyLimit({ maxSize: 128 * 1024, onError: c => c.json({ error: { code: 'body_limit', message: 'Request exceeds 128 KiB.' } }, 413) }))
-  app.get('/api/health', c => c.json({ status: 'ok', mode: 'local-synthetic-sandbox', version: '0.1.0-alpha.1', outboundDelivery: false }))
+  app.get('/api/health', c => c.json({ status: 'ok', mode: 'local-synthetic-sandbox', version: '0.1.0-alpha.2', outboundDelivery: false }))
   app.get('/api/v1/session', c => c.json({ organizationId: 'sandbox', actorId: 'local-sandbox', mode: 'local-synthetic-sandbox', productionAuthentication: false, regions, referenceSources }))
   const orgPath = '/api/v1/organizations/:org'
   app.use(`${orgPath}/*`, async (c, next) => {
@@ -82,7 +82,7 @@ export function createApp(store: PlannerStore, options: { sandbox: boolean; fetc
     catch { return c.json({ error: { code: 'source_unavailable', message: 'Source metadata could not be read. Your plan is unchanged; try again later.' } }, 502) }
   })
   app.get('/api/v1/openapi.json', c => c.json({
-    openapi: '3.1.0', info: { title: 'Map Planner local sandbox API', version: '0.1.0-alpha.1', description: 'Synthetic loopback sandbox only. No production authentication, notifications or upstream GIS writes.' },
+    openapi: '3.1.0', info: { title: 'Map Planner local sandbox API', version: '0.1.0-alpha.2', description: 'Synthetic loopback sandbox only. No production authentication, notifications or upstream GIS writes.' },
     servers: [{ url: 'http://127.0.0.1:8788' }],
     paths: {
       '/api/health': { get: { responses: { '200': { description: 'Sandbox health and outbound-delivery state.' } } } },

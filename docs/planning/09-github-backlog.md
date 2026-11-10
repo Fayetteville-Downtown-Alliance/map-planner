@@ -33,7 +33,7 @@ P0 gates the standalone pilot, P1 covers broader rollout or optional integration
 
 The original R01–R28 requirements are covered above. R29–R34 extend the backlog below. Optional deferred scope must be recorded explicitly for a release; issue closure alone does not prove production acceptance.
 
-Next ready work is #2 (decisions); #3 (bootstrap) follows it. Operations #18 starts after bootstrap and continues throughout implementation. Keep the roadmap checklist current as work issues close.
+Original dependency order was #2 → #3. Bootstrap #3 is now closed; production decisions #2 and operations #18 remain open. Current GIS follow-up is tracked under #26/#25, with actual coverage below and in implementation status.
 
 The original two planning commits and their tag were pushed to `main` at the user’s request. This backlog index is a follow-up on `planning/standalone-migration`. Source application files, real data and infrastructure remain untouched.
 
@@ -54,3 +54,8 @@ Researched November 9, 2026: [verified sources and engineering API design](10-en
 The first original synthetic sandbox is implemented; see [current implementation evidence and limits](../implementation/status.md). Issue creation state above is historical; GitHub issues hold current work status. The bootstrap is separate from production tenancy, full geometry editing and real data migration.
 
 [Issue #26](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/26) tracks the researched QGIS-compatible editor comparison (R06/R08/R29–R34). [The comparison](../research/2026-11-09-qgis-web-gis-options.md) recommends QGIS desktop interoperability, retaining the current MapLibre app during a Geoman/OpenLayers spike, and prioritizing PostGIS in the spatial backend evaluation. QGIS Server/QWC2 remains an optional project-publishing service. No extra GIS stack was installed/deployed by the research.
+
+
+### Implemented GIS slice
+
+[ADR 002](../implementation/adr-002-source-bound-gis.md) now selects OpenLayers for bounded source-limit editing, retains MapLibre/Geoman Free comparison paths, and implements versioned source references, projected curve clipping, canonical API validation and flat public provenance. Independent QGIS 3.34.4 and PostGIS 3.4.2 CI proofs passed at `9f42832`; final evidence follows the radius-boundary and gesture checks. #25/#26 remain open for current desktop clients, ArcGIS Pro, real data, generic drawing/topology and realistic load/physical-device acceptance. #21 is still metadata-only, and #22 has no imported business data.

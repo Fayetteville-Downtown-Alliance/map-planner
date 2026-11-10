@@ -1,6 +1,6 @@
 # ADR 002: Source-bound editing and engineering interchange
 
-November 9, 2026. Status: implemented sandbox contract; browser/tool acceptance in progress. Issue [#26](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/26) remains open for full editor and performance acceptance.
+November 9, 2026. Status: accepted for the bounded local source-limit editor; broader production GIS acceptance remains open. Issue [#26](https://github.com/Fayetteville-Downtown-Alliance/map-planner/issues/26) remains open for full editor and performance acceptance.
 
 ## Decision
 
@@ -18,7 +18,7 @@ The original straight fixtures retain IDs and coordinates. Additional synthetic 
 
 Three lazy adapters share identical synthetic references and a plan snapshot: current MapLibre viewer, MapLibre 6.17 + Geoman Free 0.10.8 endpoint dragging, and OpenLayers 10.11 Modify/Snap on the two limit points. Both editing adapters return coordinates through the same projection guard. Geoman's public Free package is the actual installed dependency; no paid demo is relied on. Generic freehand Draw/trace, native Geoman line snapping, multi-feature topology, and full undo history are not implemented or accepted by this slice. No arbitrary sketch implies a verified boundary.
 
-The current viewer remains the default during evaluation. The candidate bundles are isolated. Initial build observations: OpenLayers adapter about 324 kB minified / 91 kB gzip; MapLibre about 1,088 kB / 295 kB plus 520 kB worker, and Geoman adds about 685 kB / 193 kB. Shared application code is about 635 kB / 194 kB including projection support. These emitted-file sizes are not a network or phone-memory benchmark. Browser evidence records readiness and resource bytes for the same workflow; caching state and engine are named. No production editor replacement is inferred from file size alone.
+OpenLayers is the default for this bounded source-limit editor: its Modify handles pass an actual desktop drag/cancel check and its emitted adapter is substantially smaller while rendering without WebGL. MapLibre remains an explicit viewer/comparison choice and Geoman remains an optional comparison path. This does not accept generic topology/drawing or production load requirements. The candidate bundles are isolated. Initial build observations: OpenLayers adapter about 324 kB minified / 91 kB gzip; MapLibre about 1,088 kB / 295 kB plus 520 kB worker, and Geoman adds about 685 kB / 193 kB. Shared application code is about 635 kB / 194 kB including projection support. These emitted-file sizes are not a network or phone-memory benchmark. Browser evidence records initial/fresh-context and reload readiness/resource bytes for the same workflow; caching state and engine are named. Ready callbacks differ by renderer (style/plugin load versus rendercomplete), so these are diagnostic observations, not a statistically comparable speed ranking. No production editor replacement is inferred from file size alone.
 
 ## QGIS and PostGIS
 
@@ -37,3 +37,10 @@ The separate CI job installs Ubuntu distribution GIS tools on an ephemeral runne
 - [PROJ Lambert conformal conic](https://proj.org/en/stable/operations/projections/lcc.html): projection parameters; authoritative datum/grid selection remains separate work.
 
 MapLibre BSD-3-Clause, OpenLayers BSD-2-Clause, Geoman Free MIT and Proj4 MIT remain component-specific licenses. QGIS is a separate GPL tool invoked in CI, not bundled into the web app. OSM is a possible licensed data adapter, not an editor replacement. QGIS Server/QWC2 remains optional only for full project/layout publishing needs.
+
+
+## Verified receipt and remaining gates
+
+At `9f42832`, [CI run 42729629198](https://github.com/Fayetteville-Downtown-Alliance/map-planner/actions/runs/42729629198) passed both jobs: 26 source tests and 18 browser cases, plus QGIS **3.34.4-Prizren**, PostgreSQL 16/PostGIS **3.4.2**, GEOS **3.12.1**, PROJ **9.4.0** (network grids off). The independent tool job preserved all five public restrictions, split across two lines/two points/one unmapped layer. The 0.02 metre projection/subcurve checks passed. PostGIS selected an index scan in this tiny synthetic query; this is no evidence of scale. A subsequent review found integer division in the demonstration radius expression; changed it to floating point and added inside/outside 25 metre boundary checks. Final CI must pass that correction before tagging.
+
+The comparison's desktop drag/cancel tests observe rendered pixels and send real pointer events, without a test-only map API. Phone checks exercise numeric controls/rendering and emulate reduced motion; physical touch gestures, current QGIS desktop/LTR versions, ArcGIS Pro, keyboard/assistive technology and realistic workloads remain open. Older strict-schema web clients cannot consume the new reference fields: this sandbox release needs a page reload; production rollout still requires explicit reader-before-writer capability/version handling. Old device drafts remain readable by the new client.

@@ -18,3 +18,5 @@ Reviewed November 9, 2026. Owner: Fayetteville Downtown Alliance; individual imp
 `source-manifest.json` pins source file hashes for future selective copying. Source paths in these documents are relative to `~/Git/dta`; target paths are proposals relative to this repository unless stated otherwise. The manifest is a discovery inventory, not a complete dependency closure or permission to copy every listed file.
 
 Evidence labels: **source** means inspected code at the recorded revision; **historical** means an existing DTA runbook's dated report; **proposed** means a requirement/design for Map Planner; **unverified** means no current runtime or device proof.
+
+13. [Source-bound GIS implementation decision and executable checks](../implementation/adr-002-source-bound-gis.md)

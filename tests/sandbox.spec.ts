@@ -1,3 +1,4 @@
+import { mkdir, writeFile } from 'node:fs/promises'
 import { expect, test, type APIRequestContext } from '@playwright/test'
 async function createFixture(request: APIRequestContext, title: string) {
   const response = await request.post('/api/v1/organizations/sandbox/events', { headers: { 'X-Map-Planner-Sandbox': '1', 'Idempotency-Key': crypto.randomUUID() }, data: { title, date: '2026-11-20', regionId: 'demo-east' } })
@@ -49,7 +50,7 @@ test('320px layout keeps written controls usable with reduced motion and map fai
   const id = await createFixture(request, 'Small-screen failure fixture')
   await page.setViewportSize({ width: 320, height: 780 })
   await page.addInitScript(() => { HTMLCanvasElement.prototype.getContext = () => null })
-  await page.goto(`/?event=${id}`)
+  await page.goto(`/?event=${id}&map=maplibre`)
   await expect(page.getByRole('button', { name: 'Add restriction' })).toBeVisible()
   await page.getByRole('button', { name: 'Add restriction' }).click()
   await expect(page.getByLabel('Location description')).toBeVisible()
@@ -65,7 +66,7 @@ test('320px layout keeps written controls usable with reduced motion and map fai
 
 test('renders the actual bundled map and local worker before editing', async ({ page, request }) => {
   const id = await createFixture(request, 'Working map fixture')
-  await page.goto(`/?event=${id}`)
+  await page.goto(`/?event=${id}&map=maplibre`)
   await expect(page.locator('.map-figure')).toHaveAttribute('data-map-state', 'ready')
   const missing = await request.get('/assets/does-not-exist.js')
   expect(missing.status()).toBe(404)
@@ -84,6 +85,10 @@ for (const engine of ['maplibre', 'geoman', 'openlayers']) {
     await page.goto(`/?event=${id}&map=${engine}`)
     await expect(page.locator('.map-figure')).toHaveAttribute('data-map-engine', engine)
     await expect(page.locator('.map-figure')).toHaveAttribute('data-map-state', 'ready', { timeout: 25_000 })
+    const initialObservation = await page.evaluate(() => ({
+      readyMs: Number(document.querySelector('.map-canvas')?.getAttribute('data-ready-ms')),
+      resources: performance.getEntriesByType('resource').map(r => ({ name: new URL(r.name).pathname, bytes: (r as PerformanceResourceTiming).encodedBodySize })).filter(r => r.name.startsWith('/assets/')),
+    }))
     await page.getByRole('combobox', { name: /^Location/ }).selectOption('demo-east-curve')
     await page.getByRole('button', { name: 'Add restriction' }).click()
     const selector = page.getByLabel('Edit reference limits')
@@ -102,6 +107,62 @@ for (const engine of ['maplibre', 'geoman', 'openlayers']) {
     await expect(page.getByText('Enter start and end within 0–100%, with start before end.')).toBeVisible()
     await start.fill('20'); await end.fill('80')
     await page.getByRole('button', { name: 'Apply limits to draft' }).click()
+    if (test.info().project.name === 'desktop-chromium' && engine !== 'maplibre') {
+      await page.locator('.map-canvas').scrollIntoViewIfNeeded()
+      let handle: { x: number; y: number }
+      if (engine === 'geoman') {
+        const box = await page.locator('.map-canvas').boundingBox()
+        expect(box).not.toBeNull()
+        const screenshot = await page.locator('.map-canvas').screenshot({ scale: 'css' })
+        handle = await page.evaluate(async ({ data, box }) => {
+          const image = new Image(); image.src = `data:image/png;base64,${data}`; await image.decode()
+          const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height
+          const context = canvas.getContext('2d')!; context.drawImage(image,0,0)
+          const pixels = context.getImageData(0,0,canvas.width,canvas.height).data
+          const points: {x:number;y:number}[] = []
+          for (let y=0;y<canvas.height;y++) for(let x=0;x<canvas.width;x++) {
+            const i=(y*canvas.width+x)*4
+            if (pixels[i]<80 && pixels[i+1]>90 && pixels[i+2]>180 && pixels[i+2]>pixels[i+1]+30) points.push({x,y})
+          }
+          if (!points.length) throw Error('No rendered Geoman handle found')
+          const left = Math.min(...points.map(p=>p.x)), cluster = points.filter(p=>p.x < left+24)
+          return { x: box.x+cluster.reduce((n,p)=>n+p.x,0)/cluster.length,
+            y: box.y+cluster.reduce((n,p)=>n+p.y,0)/cluster.length }
+        }, { data: screenshot.toString('base64'), box: box! })
+      } else {
+        // Find the actual rendered start handle in the local, untainted canvas.
+        // This observes pixels; it does not call an internal map/test-only API.
+        handle = await page.locator('.map-canvas').evaluate(root => {
+          for (const canvas of root.querySelectorAll('canvas')) {
+            const context = canvas.getContext('2d')
+            if (!context) continue
+            const pixels = context.getImageData(0,0,canvas.width,canvas.height).data
+            const points: { x: number; y: number }[] = []
+            for (let y=0;y<canvas.height;y++) for (let x=0;x<canvas.width;x++) {
+              const i=(y*canvas.width+x)*4
+              if (pixels[i]===21 && pixels[i+1]===60 && pixels[i+2]===65 && pixels[i+3]===255) points.push({x,y})
+            }
+            if (!points.length) continue
+            const left = Math.min(...points.map(p=>p.x))
+            const cluster = points.filter(p=>p.x < left+24)
+            const box = canvas.getBoundingClientRect()
+            return { x: box.x+cluster.reduce((n,p)=>n+p.x,0)/cluster.length*box.width/canvas.width,
+              y: box.y+cluster.reduce((n,p)=>n+p.y,0)/cluster.length*box.height/canvas.height }
+          }
+          throw Error('No rendered limit handle found')
+        })
+      }
+      await page.mouse.move(handle.x, handle.y)
+      await page.mouse.down()
+      await page.mouse.move(handle.x+12, handle.y-9, { steps: 12 })
+      await page.mouse.up()
+      await expect(start).not.toHaveValue('20')
+      const gestured = Number(await start.inputValue())
+      expect(gestured).toBeGreaterThan(20); expect(gestured).toBeLessThan(80)
+      // A gesture is a preview; cancel restores the applied draft limits.
+      await page.getByRole('button', { name: 'Cancel limit preview' }).click()
+      await expect(start).toHaveValue('20'); await expect(end).toHaveValue('80')
+    }
     await page.getByLabel('Private access instructions (optional)').fill('PRIVATE GIS fixture')
     await page.getByRole('button', { name: 'Save draft', exact: true }).click()
     await expect(page.getByText('Draft saved. The published version has not changed.')).toBeVisible()
@@ -123,7 +184,10 @@ for (const engine of ['maplibre', 'geoman', 'openlayers']) {
       readyMs: Number(document.querySelector('.map-canvas')?.getAttribute('data-ready-ms')),
       resources: performance.getEntriesByType('resource').map(r => ({ name: new URL(r.name).pathname, bytes: (r as PerformanceResourceTiming).encodedBodySize })).filter(r => r.name.startsWith('/assets/')),
     }))
-    await test.info().attach('renderer-observation.json', { body: JSON.stringify({ engine, project: test.info().project.name, cache: 'reload-after-identical-edit-workflow', ...metrics }, null, 2), contentType: 'application/json' })
+    await mkdir(test.info().outputDir, { recursive: true })
+    const observationPath = test.info().outputPath('renderer-observation.json')
+    await writeFile(observationPath, JSON.stringify({ engine, project: test.info().project.name, cache: 'fresh-context-then-reload-after-identical-edit-workflow', initial: initialObservation, reload: metrics }, null, 2))
+    await test.info().attach('renderer-observation.json', { path: observationPath, contentType: 'application/json' })
     expect(errors).toEqual([])
     await page.screenshot({ path: `test-results/${test.info().project.name}-${engine}-limits.png`, fullPage: true, scale: 'css' })
   })

@@ -1,4 +1,4 @@
-import { anchorFor, clippedGeometry, type ReferenceAnchor } from './linear-reference'
+import { anchorFor, clippedGeometry } from './linear-reference'
 export * from './linear-reference'
 import { Temporal } from '@js-temporal/polyfill'
 import { z } from 'zod'
