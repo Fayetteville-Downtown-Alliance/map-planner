@@ -74,3 +74,7 @@ Implemented original projected linear-reference functions, additive source ident
 ### GIS tool receipt and editor selection
 
 CI run [42729629198](https://github.com/Fayetteville-Downtown-Alliance/map-planner/actions/runs/42729629198) passed both jobs at `9f42832`: 26 source checks, 18 browser cases, and independent QGIS 3.34.4/PostGIS 3.4.2/PROJ 9.4.0 checks. QGIS preserved two lines, two points and one null-geometry record through GeoPackage; projected control points/subcurves passed the declared 0.02 metre numerical comparison. Both editing candidates subsequently passed actual local desktop handle drag/cancel tests. Selected OpenLayers as the bounded local editor, retaining explicit MapLibre/Geoman alternatives. Reviewed the SQL report and corrected integer division in the demonstration radius, adding independent inside/outside 25 metre boundary checks. Added fresh-context/reload resource observations and bumped the local prerelease to alpha.2; final CI must include these follow-ups before a tag.
+
+### Observed bundler correction
+
+Fresh-context resource evidence exposed Vite merging a conditional dynamic-import preload list: the OpenLayers route unnecessarily loaded MapLibre and omitted the OpenLayers CSS preload. Separated import/creation branches, inspected the emitted preload lists, and added positive OL stylesheet plus negative MapLibre/Geoman resource assertions. This was found from actual built-client observations, beyond emitted chunk sizes.

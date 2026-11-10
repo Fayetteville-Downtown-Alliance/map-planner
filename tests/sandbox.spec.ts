@@ -89,6 +89,10 @@ for (const engine of ['maplibre', 'geoman', 'openlayers']) {
       readyMs: Number(document.querySelector('.map-canvas')?.getAttribute('data-ready-ms')),
       resources: performance.getEntriesByType('resource').map(r => ({ name: new URL(r.name).pathname, bytes: (r as PerformanceResourceTiming).encodedBodySize })).filter(r => r.name.startsWith('/assets/')),
     }))
+    if (engine === 'openlayers') {
+      expect(initialObservation.resources.some(r => /maplibre|geoman/.test(r.name))).toBe(false)
+      expect(initialObservation.resources.some(r => /openlayers.*\.css$/.test(r.name))).toBe(true)
+    }
     await page.getByRole('combobox', { name: /^Location/ }).selectOption('demo-east-curve')
     await page.getByRole('button', { name: 'Add restriction' }).click()
     const selector = page.getByLabel('Edit reference limits')
