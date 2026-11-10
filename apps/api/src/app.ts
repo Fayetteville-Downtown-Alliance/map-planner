@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
 import { createHash, randomUUID } from 'node:crypto'
 import { z } from 'zod'
-import { day, eventInputSchema, publicEvents, geoJSON, regions, roadsFor } from '@map-planner/domain'
+import { ReferenceError, day, eventInputSchema, publicEvents, geoJSON, regions, roadsFor } from '@map-planner/domain'
 import { inspectLayer, referenceSources } from '@map-planner/gis'
 import { PlannerStore, StoreError } from './store'
 
@@ -98,7 +98,7 @@ export function createApp(store: PlannerStore, options: { sandbox: boolean; fetc
     if (error instanceof StoreError) return c.json({ error: { code: error.code, message: error.message } }, error.status as 400 | 404 | 409)
     if (error instanceof z.ZodError) return c.json({ error: { code: 'validation', message: error.issues.map(i => `${i.path.join('.') || 'Request'}: ${i.message}`).join(' ') } }, 400)
     if (error instanceof SyntaxError) return c.json({ error: { code: 'invalid_json', message: 'Send valid JSON.' } }, 400)
-    if (error instanceof RangeError || (error instanceof Error && /Each restriction|Confirmed no restrictions|reopening must|parking restrictions/.test(error.message))) return c.json({ error: { code: 'validation', message: error.message } }, 400)
+    if (error instanceof ReferenceError || error instanceof RangeError || (error instanceof Error && /Each restriction|Confirmed no restrictions|reopening must|parking restrictions/.test(error.message))) return c.json({ error: { code: 'validation', message: error.message } }, 400)
     console.error('[map-planner] Request failed', { name: error.name })
     return c.json({ error: { code: 'internal_error', message: 'The request failed. Keep your draft and check its operation receipt before retrying.' } }, 500)
   })

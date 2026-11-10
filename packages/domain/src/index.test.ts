@@ -26,7 +26,7 @@ describe('plan and regional time', () => {
     const plan = { ...emptyPlan(), entries, notes: 'PRIVATE ORGANIZER NOTES' }
     const event: EventRecord = { id: 'event-1', organizationId: 'demo', title: 'Synthetic event', date: '2026-11-20', regionId: regions[0].id, revision: 4, plan: emptyPlan(), publication: { version: 3, publishedAt: '2026-11-01T00:00:00Z', plan } }
     const result = geoJSON(publicEvents([event]))
-    expect(result.features.map(x => x.geometry?.type ?? null)).toEqual([null, 'LineString', 'LineString', 'Point'])
+    expect(result.features.map(x => x.geometry?.type ?? null)).toEqual([null, ...roadsFor(regions[0]).map(r => r.geometry.type)])
     expect(JSON.stringify(result)).not.toMatch(/PRIVATE|accessNotes|notes/)
     expect(result.features[0].properties.publicationVersion).toBe(3)
     expect(result.features[0].id).toBe('event-1:road-1')

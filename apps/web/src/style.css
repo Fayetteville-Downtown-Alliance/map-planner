@@ -8,3 +8,5 @@
 body{overflow-wrap:anywhere}input,select,textarea,.form-grid>label{min-width:0}legend{max-width:100%;white-space:normal}
 .map-figure[data-map-state=failed] .map-canvas{display:none}.map-fallback{position:static;margin:.6rem 0;max-width:none}
 .state-label{white-space:normal;max-width:100%}
+
+.limit-editor{margin-bottom:1.5rem}.map-canvas .ol-viewport{touch-action:pan-y}.map-canvas:focus-visible{outline-offset:3px}

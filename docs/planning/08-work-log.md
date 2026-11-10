@@ -66,3 +66,7 @@ M1: clarify reusable source/data rights, select backend/pilot parameters, bootst
 ## GIS implementation execution — November 9, 2026
 
 Accepted the QGIS-compatible browser/domain/interchange and PostGIS comparison workstream. Updated the delivery plan with five bounded steps and explicit acceptance gaps. Local environment check: Docker daemon unavailable, psql 16.15 present, no QGIS/ogr2ogr executable. Tool runtime evidence will come from isolated CI rather than shared local service changes.
+
+### Source-bound editing candidate
+
+Implemented original projected linear-reference functions, additive source identity/limits, canonical server validation and public GIS status/provenance. Added shared renderer/handle adapters, numeric preview/apply/cancel/undo, Geoman Free and OpenLayers candidates, and typed API-backed GIS fixtures. Added independent PyQGIS and isolated PostGIS proof scripts and a dedicated CI job. Domain/API source suite passed 26 tests locally. Browser checks and actual GIS tool receipts are in progress; no production acceptance is claimed by this commit.

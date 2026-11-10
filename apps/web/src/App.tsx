@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { emptyPlan, regions, roadsFor, type EventRecord, type Plan, type Region, type Restriction } from '@map-planner/domain'
+import { anchorFor, emptyPlan, regions, roadsFor, type EventRecord, type Plan, type Region, type Restriction } from '@map-planner/domain'
 import { ApiError, command, read, receipt, type PendingCommand, type Session } from './api'
 import { clearDraft, loadDraft, saveDraft } from './drafts'
-import { PlanMap } from './PlanMap'
+import { ReferenceWorkbench } from './ReferenceWorkbench'
 
 const root = '/api/v1/organizations/sandbox'
 const impactNames = { full: 'Closed to traffic', lane: 'Lane restriction', parking: 'Parking only' }
@@ -125,7 +125,7 @@ function Editor({ initial, onSaved }: { initial: EventRecord; onSaved: (record: 
   }
   function addRestriction() {
     const road = roads.find(r => r.id === roadId)
-    const entry: Restriction = { id: crypto.randomUUID(), label: road?.label ?? 'Written location — review limits', referenceId: road?.id ?? '', geometry: road?.geometry ?? null, impact: 'full', status: 'planned', direction: 'both',
+    const entry: Restriction = { id: crypto.randomUUID(), label: road?.label ?? 'Written location — review limits', referenceId: road?.id ?? '', geometry: road?.geometry ?? null, ...(road ? { reference: anchorFor(region, road) } : {}), impact: 'full', status: 'planned', direction: 'both',
       startsAt: `${event.date}T09:00`, endsAt: `${event.date}T17:00`, parkingStartsAt: '', accessNotes: '', sourceUrl: '', detour: '' }
     setPlan(value => ({ ...value, entries: [...value.entries, entry], noRoadClosuresConfirmed: false }))
   }
@@ -138,7 +138,7 @@ function Editor({ initial, onSaved }: { initial: EventRecord; onSaved: (record: 
     {pending && <section className="recovery"><h2>Check the last operation</h2><p>It may already have completed. Your draft and operation ID are preserved; another save is paused.</p><button disabled={busy} onClick={async () => { setBusy(true); try { adopt(await receipt(pending.id)); setNotice('The accepted operation was recovered.') } catch (e) { setError(message(e)) } finally { setBusy(false) } }}>Check operation receipt</button></section>}
     {(baseRevision !== event.revision || error.includes('elsewhere')) && <p className="notice">Your draft started at revision {baseRevision}; the saved event is revision {event.revision}. Compare before applying it.</p>}
     <div className="map-heading"><h2>Draft map</h2><span>{plan.entries.filter(e => e.status !== 'cancelled').length} active restrictions</span></div>
-    <PlanMap region={region} plan={plan} />
+    <ReferenceWorkbench region={region} plan={plan} disabled={busy || !!pending || !!restored.error} revision={event.revision} onChange={change} />
     <div className="section-heading"><div><h2>Street restrictions</h2><p className="muted">Use the named references or keep an uncertain location as text.</p></div></div>
     <div className="add-row"><label>Location<select value={roadId} onChange={e => setRoadId(e.target.value)}>{roads.map(road => <option key={road.id} value={road.id}>{road.label}</option>)}<option value="written">Written location · unmapped</option></select></label><button disabled={plan.entries.length >= 32 || busy || !!pending || !!restored.error} onClick={addRestriction}>Add restriction</button></div>
     {!plan.entries.length && <p className="empty-state">No restrictions are recorded. An empty plan does not confirm that roads are open.</p>}

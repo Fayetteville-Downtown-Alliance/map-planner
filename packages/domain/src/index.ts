@@ -1,3 +1,5 @@
+import { anchorFor, clippedGeometry, type ReferenceAnchor } from './linear-reference'
+export * from './linear-reference'
 import { Temporal } from '@js-temporal/polyfill'
 import { z } from 'zod'
 
@@ -17,9 +19,15 @@ export const geometrySchema = z.discriminatedUnion('type', [
 ]).nullable()
 export type Geometry = z.infer<typeof geometrySchema>
 
+export class ReferenceError extends Error {}
+export const referenceAnchorSchema = z.object({
+  sourceId: identifier, datasetVersion: identifier, featureId: identifier,
+  measurementCRS: z.enum(['EPSG:2264', 'EPSG:32610']),
+  startFraction: z.number().min(0).max(1), endFraction: z.number().min(0).max(1),
+}).strict()
 export const restrictionSchema = z.object({
   id: identifier, label: z.string().trim().min(2).max(160),
-  referenceId: z.string().max(160), geometry: geometrySchema,
+  referenceId: z.string().max(160), geometry: geometrySchema, reference: referenceAnchorSchema.optional(),
   impact: z.enum(['full', 'lane', 'parking']), status: z.enum(['planned', 'confirmed', 'cancelled']),
   direction: z.enum(['both', 'from_to', 'to_from']),
   startsAt: localMinute, endsAt: localMinute,
@@ -48,6 +56,8 @@ export function roadsFor(region: Region): Road[] {
   return [
     { id: `${region.id}-example`, label: 'Example Street · West Avenue to East Avenue', geometry: { type: 'LineString', coordinates: [[x - .004, y], [x, y], [x + .004, y]] } },
     { id: `${region.id}-market`, label: 'Demonstration Avenue · North Road to South Road', geometry: { type: 'LineString', coordinates: [[x, y - .003], [x, y], [x, y + .003]] } },
+    { id: `${region.id}-curve`, label: 'Curved Fixture Road · source west to east', geometry: { type: 'LineString', coordinates: [[x-.004,y+.001], [x-.002,y+.0025], [x+.001,y+.0015], [x+.004,y+.003]] } },
+    { id: `${region.id}-reverse`, label: 'Reversed Fixture Road · source east to west', geometry: { type: 'LineString', coordinates: [[x+.004,y-.001], [x+.001,y-.0025], [x-.002,y-.0015], [x-.004,y-.003]] } },
     { id: `${region.id}-point`, label: 'Example Street at Demonstration Avenue', geometry: { type: 'Point', coordinates: [x, y] } },
   ]
 }
@@ -55,12 +65,13 @@ export function instantFor(value: string, timeZone: string): Temporal.Instant {
   // Reject DST gaps and folds instead of inventing an offset for ambiguous wall time.
   return Temporal.PlainDateTime.from(value).toZonedDateTime(timeZone, { disambiguation: 'reject' }).toInstant()
 }
-export function validatePlan(input: unknown, timeZone: string): Plan {
+export function validatePlan(input: unknown, timeZone: string, region?: Region): Plan {
   const plan = planSchema.parse(input)
   const ids = new Set<string>()
   for (const item of plan.entries) {
     if (ids.has(item.id)) throw new Error('Each restriction needs a unique ID.')
     ids.add(item.id)
+    if (region) validateReference(item, region)
     const start = instantFor(item.startsAt, timeZone)
     const end = instantFor(item.endsAt, timeZone)
     if (Temporal.Instant.compare(end, start) <= 0) throw new Error(`${item.label}: reopening must be after the start.`)
@@ -73,12 +84,31 @@ export function validatePlan(input: unknown, timeZone: string): Plan {
   }
   return plan
 }
+/** New references are canonical; old whole-reference records must match the pinned fixture. */
+export function validateReference(item: Restriction, region: Region) {
+  if (!item.referenceId && !item.reference) return // Unverified independent geometry or written limits.
+  const road = roadsFor(region).find(r => r.id === item.referenceId)
+  if (!road) throw new ReferenceError('Unknown or cross-region reference. Keep written limits until reviewed.')
+  const expectedAnchor = anchorFor(region, road)
+  if (item.reference && (['sourceId', 'datasetVersion', 'featureId', 'measurementCRS'] as const).some(key => item.reference![key] !== expectedAnchor[key])) {
+    throw new ReferenceError('Reference source or version changed. Review the pinned reference before saving.')
+  }
+  let expected: NonNullable<Geometry>
+  try { expected = clippedGeometry(road, item.reference ?? expectedAnchor) }
+  catch (error) { throw new ReferenceError(error instanceof Error ? error.message : 'Invalid reference limits.') }
+  const points = (g: Geometry) => !g ? [] : g.type === 'Point' ? [g.coordinates] : g.coordinates
+  const actualPoints = points(item.geometry), expectedPoints = points(expected)
+  if (item.geometry?.type !== expected.type || actualPoints.length !== expectedPoints.length || actualPoints.some((p, i) => p.some((v, j) => Math.abs(v - expectedPoints[i][j]) > 1e-8))) {
+    throw new ReferenceError('Geometry does not match the source-bound limits. Reapply the reviewed reference limits.')
+  }
+  item.geometry = expected
+}
 export type EventRecord = EventInput & { id: string; organizationId: string; revision: number; plan: Plan; publication: Publication | null }
 export type Publication = { version: number; publishedAt: string; plan: Plan }
 export type PublicRestriction = Omit<Restriction, 'accessNotes'> & { startsAtUtc: string; endsAtUtc: string; parkingStartsAtUtc: string | null }
 export function publicRestriction(item: Restriction, timeZone: string): PublicRestriction {
   // Explicit public field selection. New private fields do not leak by default.
-  return { id: item.id, label: item.label, referenceId: item.referenceId, geometry: item.geometry,
+  return { id: item.id, label: item.label, referenceId: item.referenceId, geometry: item.geometry, ...(item.reference ? { reference: item.reference } : {}),
     impact: item.impact, status: item.status, direction: item.direction, startsAt: item.startsAt, endsAt: item.endsAt,
     parkingStartsAt: item.parkingStartsAt, sourceUrl: item.sourceUrl, detour: item.detour,
     startsAtUtc: instantFor(item.startsAt, timeZone).toString(), endsAtUtc: instantFor(item.endsAt, timeZone).toString(),
@@ -105,6 +135,11 @@ export function publicEvents(events: EventRecord[], date?: string): PublicEvent[
 export function geoJSON(events: PublicEvent[]) {
   return { type: 'FeatureCollection' as const, features: events.flatMap(event => event.entries.map(({ geometry, ...entry }) => ({
     type: 'Feature' as const, id: `${event.id}:${entry.id}`, geometry,
-    properties: { ...entry, eventId: event.id, eventTitle: event.title, timeZone: event.timeZone, publicationVersion: event.publicationVersion },
+    properties: { ...entry, reference: undefined,
+      restrictionId: entry.id, geometryStatus: entry.reference ? 'source-bound-synthetic' : entry.referenceId ? 'legacy-whole-synthetic' : geometry ? 'unverified' : 'unmapped',
+      sourceId: entry.reference?.sourceId ?? null, datasetVersion: entry.reference?.datasetVersion ?? null,
+      featureId: entry.reference?.featureId ?? null, measurementCRS: entry.reference?.measurementCRS ?? null,
+      startFraction: entry.reference?.startFraction ?? null, endFraction: entry.reference?.endFraction ?? null,
+      eventId: event.id, eventTitle: event.title, timeZone: event.timeZone, publicationVersion: event.publicationVersion },
   }))) }
 }

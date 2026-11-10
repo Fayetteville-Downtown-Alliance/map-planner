@@ -80,7 +80,7 @@ export class PlannerStore {
       if (event.revision !== expectedRevision) throw new StoreError(409, 'revision_conflict', 'This event changed elsewhere. Your draft is still here. Load the latest saved version to compare.')
       let publication = event.publication
       let plan = event.plan
-      if (action === 'save') plan = validatePlan(input, regions.find(r => r.id === event.regionId)!.timeZone)
+      if (action === 'save') plan = validatePlan(input, regions.find(r => r.id === event.regionId)!.timeZone, regions.find(r => r.id === event.regionId)!)
       if (action === 'publish') {
         if (!plan.entries.some(item => item.status !== 'cancelled')) throw new StoreError(400, 'no_active_restrictions', 'Save at least one active restriction before publishing.')
         publication = { version: event.revision + 1, publishedAt: new Date().toISOString(), plan: structuredClone(plan) }

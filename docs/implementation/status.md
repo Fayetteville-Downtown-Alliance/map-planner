@@ -43,3 +43,9 @@ The first GitHub run at `4fb9139` passed install/source/build and 8/9 browser ca
 The next Linux run exposed one remaining 200% text case: the “Unsaved draft” badge retained nowrap and exceeded the viewport by four pixels with Linux font metrics. Allowed that badge to wrap within its container; retained the strict 320px assertions. Remote evidence distinguishes these two observed fixes from the earlier local-only passes.
 
 Linux then passed the actual layout/render/workflow assertions; its remaining WebKit failure was the full-page screenshot exceeding the engine's 32,767 device-pixel dimension limit at 200% text and high DPR. Capture evidence at CSS-pixel scale while retaining the full page and unchanged assertions. This changes artifact sampling, not product behavior or coverage.
+
+## Source-bound GIS slice (acceptance in progress)
+
+Added source/dataset/version/feature-qualified partial limits, projected clipping with curve retention, API geometry/identity validation, and flat public GIS provenance. Old whole-reference drafts and independent/unmapped locations remain supported with explicit geometry status. The numeric limit preview/apply/cancel/undo uses the same save/publication flow. Comparison adapters implement Geoman Free endpoint dragging and OpenLayers Modify/Snap on a common contract; generic drawing and production editor selection are still open.
+
+Added API-backed synthetic fixture generation, headless PyQGIS GeoPackage/GeoJSON roundtrip and an isolated rollback-only PostGIS substring/proximity CI job. Actual runtime and browser receipts will be appended after execution. Read [ADR 002](adr-002-source-bound-gis.md) for commands, tolerances, component boundaries and remaining acceptance.

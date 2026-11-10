@@ -77,3 +77,19 @@ it('bounds repeated source inspections without accepting arbitrary URLs or makin
   expect(fetches).toBe(20)
   expect(store.list('sandbox')).toEqual([])
 })
+it('rejects forged source geometry without an audit/version write and publishes flat source provenance', async () => {
+  const { anchorFor, clippedGeometry, regions, roadsFor } = await import('@map-planner/domain')
+  const road = roadsFor(regions[0]).find(r => r.id.endsWith('-curve'))!
+  const reference = anchorFor(regions[0], road, .2, .8)
+  const created = store.create('sandbox', randomUUID(), input)
+  const path = `organizations/sandbox/events/${created.id}`
+  const partial = { ...plan, entries: [{ ...plan.entries[0], referenceId: road.id, reference, geometry: clippedGeometry(road, reference) }] }
+  const forged = { ...partial, entries: [{ ...partial.entries[0], geometry: road.geometry }] }
+  expect((await request(`${path}/plan`, 'PATCH', { expectedRevision: 0, plan: forged })).status).toBe(400)
+  expect(store.get('sandbox', created.id).revision).toBe(0)
+  expect((await request(`${path}/plan`, 'PATCH', { expectedRevision: 0, plan: partial })).status).toBe(200)
+  expect((await request(`${path}/publish`, 'POST', { expectedRevision: 1 })).status).toBe(200)
+  const result = await (await request('public/sandbox/closures?format=geojson')).json()
+  expect(result.features[0].properties).toMatchObject({ sourceId: 'synthetic-demo-east', startFraction: .2, endFraction: .8, geometryStatus: 'source-bound-synthetic', publicationVersion: 2 })
+  expect(result.features[0].properties).not.toHaveProperty('reference')
+})

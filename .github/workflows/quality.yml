@@ -31,3 +31,44 @@ jobs:
             playwright-report/
           if-no-files-found: ignore
           retention-days: 7
+
+  gis-interoperability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run fixtures:gis
+      - name: Install distribution GIS tools on isolated runner
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends python3-qgis postgresql-16 postgresql-16-postgis-3
+      - name: QGIS GeoJSON and GeoPackage roundtrip
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: /usr/bin/python3 scripts/gis/qgis-roundtrip.py test-results/gis
+      - name: PostGIS isolated substring and proximity proof
+        shell: bash
+        run: |
+          export PATH="/usr/lib/postgresql/16/bin:$PATH"
+          export PGHOST="$RUNNER_TEMP/map-planner-pg-socket"
+          export PGPORT=6543
+          export PGDATABASE=postgres
+          cluster="$RUNNER_TEMP/map-planner-pg"
+          mkdir -p "$PGHOST"
+          initdb -D "$cluster" --auth=trust --no-locale
+          pg_ctl -D "$cluster" -l "$RUNNER_TEMP/map-planner-pg.log" -o "-k $PGHOST -p $PGPORT -c listen_addresses=''" start
+          trap 'pg_ctl -D "$cluster" -m fast stop' EXIT
+          psql -X -v ON_ERROR_STOP=1 -c 'CREATE EXTENSION postgis'
+          python3 scripts/gis/postgis-proof.py test-results/gis > test-results/gis/postgis-report.txt
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: gis-evidence
+          path: test-results/gis/
+          if-no-files-found: ignore
+          retention-days: 7

@@ -18,7 +18,8 @@
     "build": "npm run typecheck && vite build --config apps/web/vite.config.ts && esbuild apps/api/src/server.ts --bundle --platform=node --format=esm --external:hono --external:hono/* --external:@hono/node-server --external:zod --external:@js-temporal/polyfill --outfile=dist/api/server.js",
     "preview:sandbox": "LOCAL_SANDBOX=1 node dist/api/server.js",
     "check": "npm run typecheck && npm test && npm run build",
-    "check:planning": "python3 scripts/verify-planning.py"
+    "check:planning": "python3 scripts/verify-planning.py",
+    "fixtures:gis": "tsx scripts/gis-fixtures.ts"
   },
   "devDependencies": {
     "@playwright/test": "1.65.0",
