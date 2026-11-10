@@ -35,8 +35,21 @@ The planning baseline is complete. This table records the original phase plan; t
 
 ## Commit discipline
 
-Use small coherent commits: evidence → domain → API → UI → publication → integrations. Commit only this task's files; preserve unrelated changes. Record source/build identity, exact test scope and open issues. Planning tags describe documentation only, never production deployment. No push, deployment or real-data migration has been performed by this baseline.
+Use small coherent commits: evidence → domain → API → UI → publication → integrations. Commit only this task's files; preserve unrelated changes. Record source/build identity, exact test scope and open issues. Planning tags describe documentation only, never production deployment. The baseline and local sandbox are pushed on the work branch. No hosted deployment or real-data migration has been performed.
 
 ## Engineering integration workstream
 
 R29–R34 extend this plan: M3 defines scoped machine identities; M4 adds ArcGIS read-only discovery/import and source-qualified reference IDs; M5 adds engineering API/catalog/bbox/snapshot contracts; M7 adds business-location crosswalks, published-change subscriptions and GIS-client acceptance. See [the engineering/GIS plan](10-engineering-gis-integrations.md) and [linked work issues](09-github-backlog.md). No connector writes back to City GIS, and publicly visible edit capabilities do not authorize writes.
+
+
+## Next GIS implementation slice (accepted November 9, 2026)
+
+Execute issue #26 in reviewable steps, retaining the local sandbox and existing save/publication contract:
+
+1. **Domain authority:** source/dataset/version/feature-qualified references; two ordered fractions along a curved or reversed reference; server-derived clipped geometry; reject unknown/stale/cross-region references and forged geometry. Preserve legacy whole-road drafts without silently reinterpreting their coordinates.
+2. **Renderer comparison:** a shared map adapter contract, identical fixture/selection/limit callbacks, MapLibre + Geoman Free versus OpenLayers. Numeric limits, apply/cancel/undo remain usable without WebGL. No external basemap or data fetches.
+3. **Engineering interchange:** flat, explicit public GeoJSON properties with stable IDs, source identity, publication version and geometry status. Generate synthetic fixtures and run PyQGIS GeoJSON → GeoPackage → GeoJSON with null/point/curve and EPSG:2264 unit/transform assertions. Desktop GUI acceptance remains separate.
+4. **Spatial backend proof:** isolated, rollback-only PostGIS SQL covering source-bound substring, feet/metres, indexed entrance proximity and tenant scope. This is an evaluation, not an application database migration or public service.
+5. **Evidence and decision:** compare emitted asset sizes and browser readiness on the same fixture; keep unmeasured memory/physical-device/large-scale performance open. CI must run browser and GIS checks. Select a production editor only when required interactions pass; a partial comparison cannot close #26.
+
+Local Docker currently points to an unavailable daemon; QGIS is not installed. Add runnable scripts and a dedicated CI job to obtain actual tool evidence without changing shared services on this Mac. No production resources or real City feature imports are part of this slice.

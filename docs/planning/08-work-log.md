@@ -62,3 +62,7 @@ M1: clarify reusable source/data rights, select backend/pilot parameters, bootst
 
 - CI at `4fb9139` found a Linux desktop Chromium 320px form overflow despite passing the other eight browser cases. Added detailed overflow evidence and a 200% text reproduction, fixed the native control/grid minimum sizing and fallback text flow, and passed the expanded nine-case local suite. Correction commit: `7fb26b2`. Browser artifacts are now retained by CI. This failure was not bypassed or hidden with page overflow clipping.
 - The owned detached clean-checkout verification worktree was removed after its successful install/check; unrelated worktrees were untouched.
+
+## GIS implementation execution — November 9, 2026
+
+Accepted the QGIS-compatible browser/domain/interchange and PostGIS comparison workstream. Updated the delivery plan with five bounded steps and explicit acceptance gaps. Local environment check: Docker daemon unavailable, psql 16.15 present, no QGIS/ogr2ogr executable. Tool runtime evidence will come from isolated CI rather than shared local service changes.
