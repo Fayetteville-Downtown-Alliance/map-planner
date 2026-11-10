@@ -51,3 +51,9 @@ See the [planning index](docs/planning/README.md), [local decisions](docs/implem
 GIS work now includes source-bound partial-road limits and a renderer selector with OpenLayers as the local reference-limit editor and MapLibre/Geoman Free as comparison options. Use a curved/reversed synthetic location, add a restriction, select it under **Edit reference limits**, preview percentages and apply them to the draft before saving. Map gestures never save or publish automatically.
 
 For engineers, `npm run fixtures:gis` generates typed synthetic public GeoJSON in `test-results/gis/`. The dedicated CI GIS job checks PyQGIS/GeoPackage interchange and isolated PostGIS spatial queries. See [the GIS contract and runnable checks](docs/implementation/adr-002-source-bound-gis.md). No real data or production GIS service is enabled.
+
+## Cloudflare Worker preview
+
+A separate browser-isolated synthetic Worker preview is implemented. Each browser gets its own workspace, with seven-day expiry; preview publications are visible within that workspace. This does not enable production sign-in, real data or public organizational publishing.
+
+`npm run build:worker` creates Cloudflare Build Output; `npm run test:worker` exercises the real local Workers runtime over HTTPS. Deploy with the project-pinned `npx cf` and a newly generated preview signing secret. See [preview architecture, deployment and verification](docs/implementation/adr-003-cloudflare-preview.md). The deployment receipt will record the live URL and exact revision after verification.

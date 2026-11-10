@@ -1,7 +1,7 @@
 import { planSchema, eventInputSchema, type EventRecord, type Region } from '@map-planner/domain'
 import { z } from 'zod'
 export type Source = { id: string; name: string; url: string }
-export type Session = { organizationId: string; mode: string; regions: Region[]; referenceSources: Source[] }
+export type Session = { organizationId: string; mode: string; draftScope?: string; regions: Region[]; referenceSources: Source[] }
 export class ApiError extends Error {
   constructor(public code: string, message: string, public status = 0) { super(message) }
 }

@@ -20,3 +20,5 @@ Reviewed November 9, 2026. Owner: Fayetteville Downtown Alliance; individual imp
 Evidence labels: **source** means inspected code at the recorded revision; **historical** means an existing DTA runbook's dated report; **proposed** means a requirement/design for Map Planner; **unverified** means no current runtime or device proof.
 
 13. [Source-bound GIS implementation decision and executable checks](../implementation/adr-002-source-bound-gis.md)
+
+14. [Cloudflare preview architecture and deployment](../implementation/adr-003-cloudflare-preview.md)

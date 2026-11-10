@@ -6,7 +6,10 @@ const schema = z.object({ version: z.literal(1), baseRevision: z.number().int().
   pending: z.object({ id: z.string().uuid(), path: z.string().startsWith('/api/v1/organizations/sandbox/'), method: z.enum(['PATCH','POST']), body: z.unknown() }).nullable(),
 }).strict()
 export type Draft = { version: 1; baseRevision: number; plan: Plan; pending: PendingCommand | null }
-const key = (id: string) => `map-planner:sandbox:local-sandbox:${id}:v1`
+let scope = 'local-sandbox'
+export function setDraftScope(value: string) { scope = value }
+export function pendingCreationKey() { return scope === 'local-sandbox' ? 'map-planner:sandbox:create-pending' : `map-planner:preview:${scope}:create-pending` }
+const key = (id: string) => `map-planner:sandbox:${scope}:${id}:v1`
 export function loadDraft(id: string): Draft | null {
   const text = localStorage.getItem(key(id))
   if (!text) return null

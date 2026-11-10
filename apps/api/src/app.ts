@@ -4,19 +4,19 @@ import { createHash, randomUUID } from 'node:crypto'
 import { z } from 'zod'
 import { ReferenceError, day, eventInputSchema, publicEvents, geoJSON, regions, roadsFor } from '@map-planner/domain'
 import { inspectLayer, referenceSources } from '@map-planner/gis'
-import { PlannerStore, StoreError } from './store'
+import { PlannerStore, StoreError } from './planner-store'
 
 const operationIdSchema = z.string().uuid()
 const revisionSchema = z.number().int().nonnegative()
-export function createApp(store: PlannerStore, options: { sandbox: boolean; fetcher?: typeof fetch }) {
+export function createApp(store: PlannerStore, options: { sandbox: boolean; fetcher?: typeof fetch; hostedPreview?: boolean; buildRevision?: string }) {
   if (!options.sandbox) throw new Error('Only the local synthetic sandbox is supported. Production authentication is not implemented.')
   const app = new Hono()
   app.use('/api/*', async (c, next) => {
     const url = new URL(c.req.url)
-    if (!['localhost', '127.0.0.1'].includes(url.hostname)) return c.json({ error: { code: 'sandbox_host', message: 'This sandbox accepts loopback requests only.' } }, 403)
+    if (!options.hostedPreview && !['localhost', '127.0.0.1'].includes(url.hostname)) return c.json({ error: { code: 'sandbox_host', message: 'This sandbox accepts loopback requests only.' } }, 403)
     // Never trust forwarded identity/host headers. The only principal is a local synthetic workspace.
     const origin = c.req.header('origin')
-    if (origin && !['http://127.0.0.1:5178', 'http://localhost:5178', 'http://127.0.0.1:8788', 'http://localhost:8788'].includes(origin)) {
+    if (origin && !(options.hostedPreview ? origin === url.origin : ['http://127.0.0.1:5178', 'http://localhost:5178', 'http://127.0.0.1:8788', 'http://localhost:8788'].includes(origin))) {
       return c.json({ error: { code: 'sandbox_origin', message: 'This origin cannot access the local sandbox.' } }, 403)
     }
     if (!['GET', 'HEAD', 'OPTIONS'].includes(c.req.method)) {
@@ -29,8 +29,8 @@ export function createApp(store: PlannerStore, options: { sandbox: boolean; fetc
     await next()
   })
   app.use('/api/*', bodyLimit({ maxSize: 128 * 1024, onError: c => c.json({ error: { code: 'body_limit', message: 'Request exceeds 128 KiB.' } }, 413) }))
-  app.get('/api/health', c => c.json({ status: 'ok', mode: 'local-synthetic-sandbox', version: '0.1.0-alpha.2', outboundDelivery: false }))
-  app.get('/api/v1/session', c => c.json({ organizationId: 'sandbox', actorId: 'local-sandbox', mode: 'local-synthetic-sandbox', productionAuthentication: false, regions, referenceSources }))
+  app.get('/api/health', c => c.json({ status: 'ok', mode: options.hostedPreview ? 'isolated-synthetic-preview' : 'local-synthetic-sandbox', buildRevision: options.buildRevision ?? 'local', version: '0.1.0-alpha.3', outboundDelivery: false }))
+  app.get('/api/v1/session', c => c.json({ organizationId: 'sandbox', actorId: 'local-sandbox', mode: options.hostedPreview ? 'isolated-synthetic-preview' : 'local-synthetic-sandbox', productionAuthentication: false, regions, referenceSources: options.hostedPreview ? [] : referenceSources }))
   const orgPath = '/api/v1/organizations/:org'
   app.use(`${orgPath}/*`, async (c, next) => {
     if (c.req.param('org') !== 'sandbox') return c.json({ error: { code: 'not_found', message: 'This workspace is not available.' } }, 404)
@@ -73,6 +73,7 @@ export function createApp(store: PlannerStore, options: { sandbox: boolean; fetc
   })
   const inspections: number[] = []
   app.get('/api/v1/reference-sources/:source/metadata', async c => {
+    if (options.hostedPreview) return c.json({ error: { code: 'preview_disabled', message: 'External source inspection is disabled in the hosted synthetic preview.' } }, 403)
     if (!referenceSources.some(s => s.id === c.req.param('source'))) return c.json({ error: { code: 'not_found', message: 'Unknown approved source.' } }, 404)
     const now = Date.now()
     while (inspections.length && inspections[0] < now - 60_000) inspections.shift()
@@ -82,8 +83,8 @@ export function createApp(store: PlannerStore, options: { sandbox: boolean; fetc
     catch { return c.json({ error: { code: 'source_unavailable', message: 'Source metadata could not be read. Your plan is unchanged; try again later.' } }, 502) }
   })
   app.get('/api/v1/openapi.json', c => c.json({
-    openapi: '3.1.0', info: { title: 'Map Planner local sandbox API', version: '0.1.0-alpha.2', description: 'Synthetic loopback sandbox only. No production authentication, notifications or upstream GIS writes.' },
-    servers: [{ url: 'http://127.0.0.1:8788' }],
+    openapi: '3.1.0', info: { title: 'Map Planner local sandbox API', version: '0.1.0-alpha.3', description: 'Synthetic loopback sandbox only. No production authentication, notifications or upstream GIS writes.' },
+    servers: [{ url: options.hostedPreview ? new URL(c.req.url).origin : 'http://127.0.0.1:8788' }],
     paths: {
       '/api/health': { get: { responses: { '200': { description: 'Sandbox health and outbound-delivery state.' } } } },
       '/api/v1/public/{org}/closures': { get: { parameters: [
@@ -95,7 +96,7 @@ export function createApp(store: PlannerStore, options: { sandbox: boolean; fetc
   }))
   app.all('/api/*', c => c.json({ error: { code: 'not_found', message: 'This API route is not available.' } }, 404))
   app.onError((error, c) => {
-    if (error instanceof StoreError) return c.json({ error: { code: error.code, message: error.message } }, error.status as 400 | 404 | 409)
+    if (error instanceof StoreError) return c.json({ error: { code: error.code, message: error.message } }, error.status as 400 | 404 | 409 | 429)
     if (error instanceof z.ZodError) return c.json({ error: { code: 'validation', message: error.issues.map(i => `${i.path.join('.') || 'Request'}: ${i.message}`).join(' ') } }, 400)
     if (error instanceof SyntaxError) return c.json({ error: { code: 'invalid_json', message: 'Send valid JSON.' } }, 400)
     if (error instanceof ReferenceError || error instanceof RangeError || (error instanceof Error && /Each restriction|Confirmed no restrictions|reopening must|parking restrictions/.test(error.message))) return c.json({ error: { code: 'validation', message: error.message } }, 400)

@@ -83,3 +83,9 @@ Thumbs.db
 
 __pycache__/
 *.pyc
+
+# Cloudflare generated output and types
+.cloudflare/
+
+/worker-test-results/
+/worker-playwright-report/

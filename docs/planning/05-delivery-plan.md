@@ -53,3 +53,7 @@ Execute issue #26 in reviewable steps, retaining the local sandbox and existing 
 5. **Evidence and decision:** compare emitted asset sizes and browser readiness on the same fixture; keep unmeasured memory/physical-device/large-scale performance open. CI must run browser and GIS checks. Select a production editor only when required interactions pass; a partial comparison cannot close #26.
 
 Local Docker currently points to an unavailable daemon; QGIS is not installed. Add runnable scripts and a dedicated CI job to obtain actual tool evidence without changing shared services on this Mac. No production resources or real City feature imports are part of this slice.
+
+## Hosted preview extension (authorized November 9, 2026)
+
+The user now requests a Cloudflare Worker preview URL. [ADR 003](../implementation/adr-003-cloudflare-preview.md) adds a separate browser-isolated synthetic preview with its own Durable Object storage, limits and expiry. Keep original loopback development and production/PostGIS/data-rights decisions separate. Completion requires clean-source build identity, local Workers runtime/browser checks, `cf` dry-run, deployment to a new preview Worker, live health plus map/save/recovery/publication/isolation checks, and a committed receipt/tag. No existing DTA service is migrated or exposed.

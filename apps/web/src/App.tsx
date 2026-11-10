@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { anchorFor, emptyPlan, regions, roadsFor, type EventRecord, type Plan, type Region, type Restriction } from '@map-planner/domain'
 import { ApiError, command, read, receipt, type PendingCommand, type Session } from './api'
-import { clearDraft, loadDraft, saveDraft } from './drafts'
+import { clearDraft, loadDraft, saveDraft, setDraftScope, pendingCreationKey } from './drafts'
 import { ReferenceWorkbench } from './ReferenceWorkbench'
 
 const root = '/api/v1/organizations/sandbox'
@@ -19,8 +19,9 @@ export function App() {
   const { view, eventId } = useView()
   useEffect(() => {
     const controller = new AbortController()
-    void Promise.all([read<Session>('/api/v1/session', controller.signal), read<{ events: EventRecord[] }>(`${root}/events`, controller.signal)]).then(([s, result]) => {
-      setSession(s); setEvents(result.events)
+    void read<Session>('/api/v1/session', controller.signal).then(async s => {
+      const result = await read<{ events: EventRecord[] }>(`${root}/events`, controller.signal)
+      setDraftScope(s.draftScope ?? 'local-sandbox'); setSession(s); setEvents(result.events)
     }).catch(e => { if (!controller.signal.aborted) setError(message(e)) })
     return () => controller.abort()
   }, [])
@@ -31,17 +32,17 @@ export function App() {
       <a href="/" aria-current={view === 'planner' ? 'page' : undefined}>Planner</a>
       <a href="/?view=sources" aria-current={view === 'sources' ? 'page' : undefined}>Data sources</a>
       <a href="/?view=developers" aria-current={view === 'developers' ? 'page' : undefined}>Developer API</a>
-    </nav><span className="sandbox-badge">Local sandbox</span></header>
-    <div className="sandbox-notice">Synthetic plans and fictitious streets. Nothing here is an official closure notice.</div>
+    </nav><span className="sandbox-badge">{session?.mode === 'isolated-synthetic-preview' ? 'Hosted preview' : session ? 'Local sandbox' : 'Loading workspace'}</span></header>
+    <div className="sandbox-notice">Synthetic plans and fictitious streets. Nothing here is an official closure notice.{session?.mode === 'isolated-synthetic-preview' && ' This browser has its own workspace, which expires after seven days. Preview publications are visible only in this workspace; keep copies of any work you need.'}</div>
     <main id="main" tabIndex={-1}>
       {error ? <section className="page"><h1>Workspace unavailable</h1><p role="alert">{error}</p><button onClick={() => window.location.reload()}>Try loading again</button></section>
         : !session ? <p className="page" role="status">Loading your local workspace…</p>
         : view === 'sources' ? <Sources sources={session.referenceSources} />
-        : view === 'developers' ? <Developer />
+        : view === 'developers' ? <Developer hostedPreview={session.mode === 'isolated-synthetic-preview'} />
         : <div className="workspace"><aside className="sidebar" aria-label="Events"><h2>Your events</h2><p className="muted">Plan street impacts, then review a saved version.</p>
           <ul className="event-list">{events.map(event => <li key={event.id}><a href={`/?event=${event.id}`} aria-current={selected?.id === event.id ? 'page' : undefined}><strong>{event.title}</strong><span>{event.date} · {event.plan.entries.length} restrictions</span><span>{event.publication ? `Published version ${event.publication.version}` : 'Draft only'}</span></a></li>)}</ul>
           <NewEvent />
-        </aside><section className="editor-space">{selected ? <Editor key={selected.id} initial={selected} onSaved={updated => setEvents(current => current.map(e => e.id === updated.id ? updated : e))} /> : <><h1>{eventId ? 'Event unavailable' : 'Start a street plan'}</h1><p>{eventId ? 'This event is not in the local workspace. Choose an event from the list.' : 'Create a demonstration event to begin.'}</p></>}</section></div>}
+        </aside><section className="editor-space">{selected ? <Editor key={selected.id} initial={selected} hostedPreview={session.mode === 'isolated-synthetic-preview'} onSaved={updated => setEvents(current => current.map(e => e.id === updated.id ? updated : e))} /> : <><h1>{eventId ? 'Event unavailable' : 'Start a street plan'}</h1><p>{eventId ? 'This event is not in the local workspace. Choose an event from the list.' : 'Create a demonstration event to begin.'}</p></>}</section></div>}
     </main>
     <footer className="app-footer">Map Planner · Development sandbox · Reference data rights and production identity remain separate work.</footer>
   </>
@@ -53,18 +54,18 @@ function NewEvent() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [pending, setPending] = useState<PendingCommand | null>(() => {
-    try { const raw = localStorage.getItem('map-planner:sandbox:create-pending'); return raw ? JSON.parse(raw) : null } catch { return null }
+    try { const raw = localStorage.getItem(pendingCreationKey()); return raw ? JSON.parse(raw) : null } catch { return null }
   })
-  async function finish(result: EventRecord) { localStorage.removeItem('map-planner:sandbox:create-pending'); window.location.assign(`/?event=${result.id}`) }
+  async function finish(result: EventRecord) { localStorage.removeItem(pendingCreationKey()); window.location.assign(`/?event=${result.id}`) }
   return <details className="new-event"><summary>Create an event</summary><form onSubmit={async e => {
     e.preventDefault(); setError(''); setBusy(true)
     const attempt: PendingCommand = { id: crypto.randomUUID(), path: `${root}/events`, method: 'POST', body: { title, date, regionId } }
     try {
-      localStorage.setItem('map-planner:sandbox:create-pending', JSON.stringify(attempt)); setPending(attempt)
+      localStorage.setItem(pendingCreationKey(), JSON.stringify(attempt)); setPending(attempt)
       await finish(await command(attempt))
     } catch (error) {
       setError(message(error))
-      if (error instanceof ApiError && error.code !== 'unknown_outcome') { localStorage.removeItem('map-planner:sandbox:create-pending'); setPending(null) }
+      if (error instanceof ApiError && error.code !== 'unknown_outcome') { localStorage.removeItem(pendingCreationKey()); setPending(null) }
     } finally { setBusy(false) }
   }}>
     <label>Event title<input required minLength={2} maxLength={160} value={title} onChange={e => setTitle(e.target.value)} /></label>
@@ -78,7 +79,7 @@ function NewEvent() {
 function initialState(event: EventRecord) {
   try { return { draft: loadDraft(event.id), error: '' } } catch (error) { return { draft: null, error: message(error) } }
 }
-function Editor({ initial, onSaved }: { initial: EventRecord; onSaved: (record: EventRecord) => void }) {
+function Editor({ initial, onSaved, hostedPreview = false }: { initial: EventRecord; hostedPreview?: boolean; onSaved: (record: EventRecord) => void }) {
   const [restored] = useState(() => initialState(initial))
   const [event, setEvent] = useState(initial)
   const [plan, setPlan] = useState<Plan>(restored.draft?.plan ?? initial.plan)
@@ -117,7 +118,7 @@ function Editor({ initial, onSaved }: { initial: EventRecord; onSaved: (record: 
       // Store the exact queued snapshot BEFORE sending, so reload cannot create a new operation.
       saveDraft(event.id, { version: 1, baseRevision, plan, pending: attempt }); setPending(attempt)
       const result = await command(attempt)
-      adopt(result); setNotice(action === 'save' ? 'Draft saved. The published version has not changed.' : action === 'publish' ? 'Reviewed version published in the local sandbox.' : 'Publication withdrawn. The saved draft remains available.')
+      adopt(result); setNotice(action === 'save' ? 'Draft saved. The published version has not changed.' : action === 'publish' ? hostedPreview ? 'Reviewed version published in your preview workspace.' : 'Reviewed version published in the local sandbox.' : 'Publication withdrawn. The saved draft remains available.')
     } catch (e) {
       setError(message(e))
       if (e instanceof ApiError && e.code !== 'unknown_outcome') setPending(null)
@@ -176,15 +177,15 @@ function Sources({ sources }: { sources: Session['referenceSources'] }) {
   const [busy, setBusy] = useState('')
   const [error, setError] = useState('')
   return <section className="page"><p className="context">Engineering reference catalog</p><h1>Connect to source data</h1><p className="intro">Inspect the City’s public layer schema before selecting data for a project. Metadata inspection is read-only; it does not import records or establish reuse rights.</p>
-    <ul className="source-list">{sources.map(source => <li key={source.id}><div><h2>{source.name}</h2><a href={source.url} target="_blank" rel="noreferrer">View upstream ArcGIS layer</a><p className="hint">Provider: City of Fayetteville · Reuse rights unreviewed</p></div><button disabled={!!busy} onClick={async () => { setBusy(source.id); setError(''); setData(null); try { setData(await read(`/api/v1/reference-sources/${source.id}/metadata`)) } catch (e) { setError(message(e)) } finally { setBusy('') } }}>{busy === source.id ? 'Reading schema…' : 'Inspect metadata'}</button></li>)}</ul>
+    {!sources.length && <p className="notice">External source inspection is disabled in this synthetic hosted preview.</p>}<ul className="source-list">{sources.map(source => <li key={source.id}><div><h2>{source.name}</h2><a href={source.url} target="_blank" rel="noreferrer">View upstream ArcGIS layer</a><p className="hint">Provider: City of Fayetteville · Reuse rights unreviewed</p></div><button disabled={!!busy} onClick={async () => { setBusy(source.id); setError(''); setData(null); try { setData(await read(`/api/v1/reference-sources/${source.id}/metadata`)) } catch (e) { setError(message(e)) } finally { setBusy('') } }}>{busy === source.id ? 'Reading schema…' : 'Inspect metadata'}</button></li>)}</ul>
     {error && <p role="alert" className="error">{error}</p>}
     {data && <section className="metadata"><h2>Inspected metadata</h2><dl><dt>Layer</dt><dd>{String(data.name)}</dd><dt>Geometry</dt><dd>{String(data.geometryType)}</dd><dt>Native CRS identifier</dt><dd>{String(data.sourceCrs ?? 'Not advertised')}</dd><dt>Object ID field</dt><dd>{String(data.objectIdField ?? 'Not advertised')}</dd><dt>Pagination advertised</dt><dd>{data.supportsPagination ? 'Yes' : 'No'}</dd><dt>Retrieved</dt><dd>{String(data.retrievedAt)}</dd></dl><p className="notice">Native coordinates may use State Plane units. Do not read them as longitude/latitude. Inspection does not accept this layer into a plan.</p><details><summary>Inspect the sanitized schema JSON</summary><pre>{JSON.stringify(data, null, 2)}</pre></details></section>}
   </section>
 }
-function Developer() {
-  return <section className="page"><p className="context">Engineering integrations</p><h1>Build on reviewed plans</h1><p className="intro">The local sandbox exposes published synthetic restrictions as JSON and GeoJSON, including stable feature IDs, local/UTC times and publication versions.</p>
-    <h2>Try the public reader</h2><pre>{'curl "http://127.0.0.1:8788/api/v1/public/sandbox/closures?format=geojson"'}</pre><p>Save and explicitly publish a demonstration plan first. An empty response means there are no published restrictions for that query; it does not mean every street is open.</p><div className="actions"><a href="/api/v1/public/sandbox/closures?format=geojson" target="_blank" rel="noreferrer">Open GeoJSON</a><a href="/api/v1/openapi.json" target="_blank" rel="noreferrer">Open API discovery document</a></div>
-    <h2>Implemented in this sandbox</h2><ul><li>Revision-guarded saves and idempotent operation receipts.</li><li>Published snapshots that remain unchanged during draft edits.</li><li>Explicit public fields; private planning and access notes stay out.</li><li>Two synthetic regions and read-only inspection of approved ArcGIS metadata.</li></ul>
+function Developer({ hostedPreview = false }: { hostedPreview?: boolean }) {
+  return <section className="page"><p className="context">Engineering integrations</p><h1>Build on reviewed plans</h1><p className="intro">This sandbox exposes published synthetic restrictions as JSON and GeoJSON, including stable feature IDs, local/UTC times and publication versions.</p>
+    <h2>{hostedPreview ? 'Try the reader in this browser' : 'Try the public reader'}</h2><pre>{hostedPreview ? "await (await fetch('/api/v1/public/sandbox/closures?format=geojson')).json()" : 'curl "http://127.0.0.1:8788/api/v1/public/sandbox/closures?format=geojson"'}</pre>{hostedPreview && <p>This preview reader uses your browser’s workspace cookie. It does not publish plans across visitors or provide production machine access.</p>}<p>Save and explicitly publish a demonstration plan first. An empty response means there are no published restrictions for that query; it does not mean every street is open.</p><div className="actions"><a href="/api/v1/public/sandbox/closures?format=geojson" target="_blank" rel="noreferrer">Open GeoJSON</a><a href="/api/v1/openapi.json" target="_blank" rel="noreferrer">Open API discovery document</a></div>
+    <h2>Implemented in this sandbox</h2><ul><li>Revision-guarded saves and idempotent operation receipts.</li><li>Published snapshots that remain unchanged during draft edits.</li><li>Explicit public fields; private planning and access notes stay out.</li><li>Two synthetic regions; ArcGIS metadata inspection is available in loopback development.</li></ul>
     <h2>Next integration work</h2><p>Production identity and scoped machine access, full ArcGIS imports, bbox/cursor catalogs, business/parcel/entrance joins, GIS-client acceptance and signed change subscriptions remain in the implementation backlog.</p>
   </section>
 }
