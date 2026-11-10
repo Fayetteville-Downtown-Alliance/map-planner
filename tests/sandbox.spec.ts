@@ -60,7 +60,7 @@ test('320px layout keeps written controls usable with reduced motion and map fai
   const enlarged = await overflow()
   expect(enlarged.scroll, JSON.stringify(enlarged)).toBeLessThanOrEqual(enlarged.width)
   await expect(page.getByText(/This browser cannot display|Map rendering is unavailable|map component could not load/)).toBeVisible()
-  await page.screenshot({ path: `test-results/${test.info().project.name}-320px.png`, fullPage: true })
+  await page.screenshot({ path: `test-results/${test.info().project.name}-320px.png`, fullPage: true, scale: 'css' })
 })
 
 test('renders the actual bundled map and local worker before editing', async ({ page, request }) => {
@@ -73,5 +73,5 @@ test('renders the actual bundled map and local worker before editing', async ({ 
   await page.getByRole('button', { name: 'Add restriction' }).click()
   await expect(page.locator('.map-figure')).toHaveAttribute('data-map-state', 'ready')
   await expect(page.getByLabel('Location description')).toBeVisible()
-  await page.screenshot({ path: `test-results/${test.info().project.name}-map-ready.png`, fullPage: true })
+  await page.screenshot({ path: `test-results/${test.info().project.name}-map-ready.png`, fullPage: true, scale: 'css' })
 })
