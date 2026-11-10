@@ -31,7 +31,11 @@ See [ADR 001](adr-001-local-sandbox.md) for local-only decisions and [the roadma
 - Added MapLibre 6's explicit Vite-emitted worker URL and a positive map-ready case; the earlier failure-only coverage could not prove actual rendering. Browser tests use a fresh known event per case so persisted events cannot make locator counts/order nondeterministic.
 - Added metadata inspection rate limiting, an API watcher for development, and a 404/no-store response for unknown hashed asset paths rather than a cached HTML fallback.
 - Follow-up source checks passed 21 tests in five files; the built app passed nine browser cases across desktop Chromium, phone Chromium and phone WebKit, including 320px, reduced motion, deliberate renderer failure, actual bundled worker/map rendering and save/recover/publish/edit/withdraw against the real loopback SQLite API. Added explicit missing-asset HTTP assertions to the positive-render scenario.
-- Reviewed generated desktop and 320px screenshots. Physical devices, soft keyboard, assistive technology, 200% text and installed-client update scenarios remain unverified.
+- Reviewed generated desktop and 320px screenshots. Physical devices, soft keyboard, assistive technology and installed-client update scenarios remain unverified. A subsequent 200% text reflow check is recorded below.
 - Production dependency audit reported zero vulnerabilities for the locked installed runtime dependencies. This does not establish a comprehensive security audit.
 
 - The implemented metadata adapter also completed three live read-only checks against the exact approved City sources (street centerlines, address points and curb zones). Each returned its expected geometry type, EPSG:2264 and a sanitized field schema; rights remain unreviewed. No feature rows were imported.
+
+## CI-driven native form reflow correction
+
+The first GitHub run at `4fb9139` passed install/source/build and 8/9 browser cases, but Linux desktop Chromium detected horizontal overflow at 320px. A local 200% text reproduction exposed the same intrinsic-width problem: the single mobile `1fr` form track expanded to 540px. Changed that track to `minmax(0,1fr)`, allowed form controls/labels to shrink, wrapped long text and placed renderer failure copy in normal flow. No whole-page overflow hiding was added. The expanded nine-case local browser suite now passes normal and 200% text at 320px across its three browser projects. CI retains browser screenshots/traces/reports for future diagnosis; remote rerun evidence is tracked on the workflow and issues.
