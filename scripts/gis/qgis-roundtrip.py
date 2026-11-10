@@ -3,6 +3,7 @@ Usage: QT_QPA_PLATFORM=offscreen /usr/bin/python3 scripts/gis/qgis-roundtrip.py 
 Run in an environment with QGIS's Python bindings (dedicated CI job).
 """
 import json
+from datetime import datetime
 import math
 import sys
 from pathlib import Path
@@ -58,8 +59,17 @@ for index, name in enumerate(['lines', 'points', 'unmapped']):
         key = feature['properties']['restrictionId']
         returned = by_id[key]
         for field in ['restrictionId', 'eventId', 'publicationVersion', 'geometryStatus', 'sourceId',
-                      'datasetVersion', 'featureId', 'measurementCRS', 'startFraction', 'endFraction']:
+                      'datasetVersion', 'featureId', 'measurementCRS', 'startFraction', 'endFraction',
+                      'label', 'referenceId', 'impact', 'status', 'direction', 'sourceUrl', 'detour', 'timeZone']:
             assert returned['properties'].get(field) == feature['properties'].get(field), (key, field)
+        for field in ['startsAt', 'endsAt', 'parkingStartsAt', 'startsAtUtc', 'endsAtUtc', 'parkingStartsAtUtc']:
+            before_time, after_time = feature['properties'].get(field), returned['properties'].get(field)
+            if before_time in [None, '']:
+                assert after_time == before_time, (key, field)
+            else:
+                # OGR adds seconds to minute-resolution local strings. Compare time
+                # values and offsets; preserve wall time and UTC semantics explicitly.
+                assert datetime.fromisoformat(before_time.replace('Z', '+00:00')) == datetime.fromisoformat(after_time.replace('Z', '+00:00')), (key, field)
         before, after = feature['geometry'], returned['geometry']
         assert (before is None) == (after is None), key
         if before:
@@ -69,7 +79,7 @@ for index, name in enumerate(['lines', 'points', 'unmapped']):
             assert len(first) == len(second)
             assert all(abs(a-b) < 1e-7 for p, q in zip(first, second) for a, b in zip(p, q)), key
     assert 'PRIVATE' not in output.read_text()
-    report['layers'].append({'name': name, 'count': len(actual), 'idsAndProvenance': 'preserved'})
+    report['layers'].append({'name': name, 'count': len(actual), 'idsAndProvenance': 'preserved', 'statusAndTimeValues': 'preserved'})
     project.addMapLayer(saved)
 project.setCrs(QgsCoordinateReferenceSystem('EPSG:2264'))
 assert project.write(str(root / 'engineering-fixture.qgz'))

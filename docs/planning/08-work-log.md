@@ -78,3 +78,9 @@ CI run [42729629198](https://github.com/Fayetteville-Downtown-Alliance/map-plann
 ### Observed bundler correction
 
 Fresh-context resource evidence exposed Vite merging a conditional dynamic-import preload list: the OpenLayers route unnecessarily loaded MapLibre and omitted the OpenLayers CSS preload. Separated import/creation branches, inspected the emitted preload lists, and added positive OL stylesheet plus negative MapLibre/Geoman resource assertions. This was found from actual built-client observations, beyond emitted chunk sizes.
+
+### Alpha.2 release candidate
+
+CI run 42730611721 passed source, 18 browser cases, independent GIS tools, exact radius-boundary and renderer asset checks at `cd6bfa6`. Preserved the resource observations in a dated JSON receipt. Hardened delayed-import ownership/cleanup and added recovery after WebGL failure and rapid renderer changes; all three targeted recovery cases passed locally. Added explicit QGIS roundtrip comparisons for status/impact/direction and local/UTC/parking timestamps (OGR adds seconds but preserves time values). Final candidate contains 26 source tests and 21 browser cases; the annotated alpha.2 tag records the exact accepted CI run. Updated roadmap #1 and issues #25/#26 with implemented scope and remaining gates. No issue claiming complete real-data/current desktop/production acceptance was closed.
+
+Created #27 for the scoped PostGIS application-adapter prototype so the proof is not mistaken for a completed database migration or production business-impact service.

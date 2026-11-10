@@ -10,12 +10,12 @@ const store = new PlannerStore(':memory:')
 try {
   const region = regions[0], roads = roadsFor(region)
   const event = store.create('sandbox', randomUUID(), { title: 'Synthetic engineering interoperability fixture', date: '2026-11-20', regionId: region.id })
-  const base: Restriction = { id: 'base', label: 'Synthetic fixture', referenceId: '', geometry: null, impact: 'full', status: 'planned', direction: 'both', startsAt: '2026-11-20T10:00', endsAt: '2026-11-20T17:00', parkingStartsAt: '', sourceUrl: '', detour: '', accessNotes: 'PRIVATE SENTINEL' }
+  const base: Restriction = { id: 'base', label: 'Synthetic fixture', referenceId: '', geometry: null, impact: 'full', status: 'planned', direction: 'both', startsAt: '2026-11-20T10:00', endsAt: '2026-11-20T17:00', parkingStartsAt: '2026-11-20T08:00', sourceUrl: '', detour: '', accessNotes: 'PRIVATE SENTINEL' }
   const lines = roads.filter(r => /-(curve|reverse)$/.test(r.id))
   const entries = [
     ...lines.map(road => { const reference = anchorFor(region, road, .2, .8); return { ...base, id: road.id, label: road.label, referenceId: road.id, reference, geometry: clippedGeometry(road, reference) } }),
     { ...base, id: 'point', label: 'Synthetic point', referenceId: roads.at(-1)!.id, reference: anchorFor(region, roads.at(-1)!), geometry: roads.at(-1)!.geometry },
-    { ...base, id: 'unmapped', label: 'Written limits remain unmapped' },
+    { ...base, id: 'unmapped', label: 'Written limits remain unmapped', parkingStartsAt: '' },
     { ...base, id: 'unverified', label: 'Unverified independent location', geometry: { type: 'Point' as const, coordinates: [-78.879,35.052] as [number,number] } },
   ]
   store.update('sandbox', event.id, randomUUID(), 0, 'save', { ...emptyPlan(), notes: 'PRIVATE SENTINEL', entries })

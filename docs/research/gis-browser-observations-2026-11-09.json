@@ -1,0 +1,156 @@
+{
+  "sourceRevision": "cd6bfa6bdaa19baaad962d1e9facf800a5f42c14",
+  "date": "2026-11-09",
+  "environment": "Local macOS Playwright; desktop Chromium, emulated phone Chromium and WebKit; loopback uncompressed server; upstream blocked",
+  "workload": "One source-bound synthetic curved restriction through preview/apply/cancel/undo/save/reload/publication; same reference fixtures",
+  "limitations": [
+    "Single observation per engine/project; not a speed ranking or scale benchmark",
+    "Ready callbacks differ by renderer; local CPU contention and cache behavior uncontrolled",
+    "Encoded resource bytes omit any unreported worker/subresource; emitted bundle/worker sizes are separate",
+    "No physical devices, touch gesture acceptance, memory or realistic large-layer load"
+  ],
+  "observations": [
+    {
+      "project": "desktop-chromium",
+      "engine": "geoman",
+      "initialReadyMs": 1573,
+      "initialEncodedAssetBytes": 3011181,
+      "reloadReadyMs": 1359,
+      "assetNames": [
+        "/assets/index-DL9rS1SA.js",
+        "/assets/index-BLi0CEsw.css",
+        "/assets/maplibre-Ck0ID1IW.js",
+        "/assets/contract-Eh6Idzns.js",
+        "/assets/maplibre-qvkd0SPb.css",
+        "/assets/geoman-CqAZ_Bog.js",
+        "/assets/geoman-3EH5LiXU.css",
+        "/assets/maplibre-gl-worker-DTh23QKw.js"
+      ]
+    },
+    {
+      "project": "phone-chromium",
+      "engine": "geoman",
+      "initialReadyMs": 1499,
+      "initialEncodedAssetBytes": 3011181,
+      "reloadReadyMs": 1416,
+      "assetNames": [
+        "/assets/index-DL9rS1SA.js",
+        "/assets/index-BLi0CEsw.css",
+        "/assets/maplibre-Ck0ID1IW.js",
+        "/assets/contract-Eh6Idzns.js",
+        "/assets/maplibre-qvkd0SPb.css",
+        "/assets/geoman-CqAZ_Bog.js",
+        "/assets/geoman-3EH5LiXU.css",
+        "/assets/maplibre-gl-worker-DTh23QKw.js"
+      ]
+    },
+    {
+      "project": "phone-webkit",
+      "engine": "geoman",
+      "initialReadyMs": 314,
+      "initialEncodedAssetBytes": 4050683,
+      "reloadReadyMs": 213,
+      "assetNames": [
+        "/assets/index-DL9rS1SA.js",
+        "/assets/index-BLi0CEsw.css",
+        "/assets/contract-Eh6Idzns.js",
+        "/assets/maplibre-qvkd0SPb.css",
+        "/assets/maplibre-Ck0ID1IW.js",
+        "/assets/maplibre-gl-worker-DTh23QKw.js",
+        "/assets/maplibre-gl-worker-DTh23QKw.js",
+        "/assets/maplibre-gl-worker-DTh23QKw.js",
+        "/assets/geoman-3EH5LiXU.css",
+        "/assets/geoman-CqAZ_Bog.js"
+      ]
+    },
+    {
+      "project": "desktop-chromium",
+      "engine": "maplibre",
+      "initialReadyMs": 476,
+      "initialEncodedAssetBytes": 2323256,
+      "reloadReadyMs": 362,
+      "assetNames": [
+        "/assets/index-DL9rS1SA.js",
+        "/assets/index-BLi0CEsw.css",
+        "/assets/maplibre-Ck0ID1IW.js",
+        "/assets/contract-Eh6Idzns.js",
+        "/assets/maplibre-qvkd0SPb.css",
+        "/assets/maplibre-gl-worker-DTh23QKw.js"
+      ]
+    },
+    {
+      "project": "phone-chromium",
+      "engine": "maplibre",
+      "initialReadyMs": 374,
+      "initialEncodedAssetBytes": 2323256,
+      "reloadReadyMs": 252,
+      "assetNames": [
+        "/assets/index-DL9rS1SA.js",
+        "/assets/index-BLi0CEsw.css",
+        "/assets/maplibre-Ck0ID1IW.js",
+        "/assets/contract-Eh6Idzns.js",
+        "/assets/maplibre-qvkd0SPb.css",
+        "/assets/maplibre-gl-worker-DTh23QKw.js"
+      ]
+    },
+    {
+      "project": "phone-webkit",
+      "engine": "maplibre",
+      "initialReadyMs": 147,
+      "initialEncodedAssetBytes": 3362758,
+      "reloadReadyMs": 133,
+      "assetNames": [
+        "/assets/index-DL9rS1SA.js",
+        "/assets/index-BLi0CEsw.css",
+        "/assets/contract-Eh6Idzns.js",
+        "/assets/maplibre-qvkd0SPb.css",
+        "/assets/maplibre-Ck0ID1IW.js",
+        "/assets/maplibre-gl-worker-DTh23QKw.js",
+        "/assets/maplibre-gl-worker-DTh23QKw.js",
+        "/assets/maplibre-gl-worker-DTh23QKw.js"
+      ]
+    },
+    {
+      "project": "desktop-chromium",
+      "engine": "openlayers",
+      "initialReadyMs": 170,
+      "initialEncodedAssetBytes": 973585,
+      "reloadReadyMs": 145,
+      "assetNames": [
+        "/assets/index-DL9rS1SA.js",
+        "/assets/index-BLi0CEsw.css",
+        "/assets/openlayers-BIJcta_5.js",
+        "/assets/contract-Eh6Idzns.js",
+        "/assets/openlayers-c_1sG1-7.css"
+      ]
+    },
+    {
+      "project": "phone-chromium",
+      "engine": "openlayers",
+      "initialReadyMs": 155,
+      "initialEncodedAssetBytes": 973585,
+      "reloadReadyMs": 197,
+      "assetNames": [
+        "/assets/index-DL9rS1SA.js",
+        "/assets/index-BLi0CEsw.css",
+        "/assets/openlayers-BIJcta_5.js",
+        "/assets/contract-Eh6Idzns.js",
+        "/assets/openlayers-c_1sG1-7.css"
+      ]
+    },
+    {
+      "project": "phone-webkit",
+      "engine": "openlayers",
+      "initialReadyMs": 125,
+      "initialEncodedAssetBytes": 973585,
+      "reloadReadyMs": 36,
+      "assetNames": [
+        "/assets/index-DL9rS1SA.js",
+        "/assets/index-BLi0CEsw.css",
+        "/assets/contract-Eh6Idzns.js",
+        "/assets/openlayers-BIJcta_5.js",
+        "/assets/openlayers-c_1sG1-7.css"
+      ]
+    }
+  ]
+}

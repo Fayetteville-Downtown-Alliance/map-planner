@@ -4,12 +4,14 @@ import type { Handles, MapAdapter, MapOptions } from './maps/contract'
 export type Engine = 'maplibre' | 'geoman' | 'openlayers'
 // Keep import/creation branches separate: Vite's conditional-import preload
 // optimization otherwise preloads MapLibre even for the OpenLayers path.
-async function startMap(engine: Engine, options: MapOptions): Promise<MapAdapter> {
+async function startMap(engine: Engine, options: MapOptions, active: () => boolean): Promise<MapAdapter | null> {
   if (engine === 'openlayers') {
     const module = await import('./maps/openlayers')
+    if (!active()) return null
     return module.createMap(options)
   }
   const module = await import('./maps/maplibre')
+  if (!active()) return null
   return module.createMap(options, engine === 'geoman')
 }
 
@@ -24,15 +26,17 @@ export function PlanMap({ region, plan, engine = 'maplibre', handles = null, sel
     const fail = () => { if (!disposed) setFailure('Map rendering is unavailable. The full restriction list and numeric limits below remain usable.') }
     const timeout = window.setTimeout(fail, 20_000)
     const start = performance.now()
-    if (!container.current) return () => window.clearTimeout(timeout)
-    void startMap(engine, { container: container.current, region,
+    const target = container.current
+    if (!target) return () => window.clearTimeout(timeout)
+    void startMap(engine, { container: target, region,
       onReady: () => { if (!disposed) { window.clearTimeout(timeout); setReady(true); container.current?.setAttribute('data-ready-ms', String(Math.round(performance.now()-start))) } },
-      onFailure: fail, onHandles: points => callback.current(points) }).then(instance => {
+      onFailure: fail, onHandles: points => callback.current(points) }, () => !disposed).then(instance => {
+      if (!instance) return
       if (disposed) { instance.dispose(); return }
       adapter.current = instance
       instance.update(snapshot.current)
     }).catch(fail)
-    return () => { disposed = true; window.clearTimeout(timeout); adapter.current?.dispose(); adapter.current = null }
+    return () => { disposed = true; window.clearTimeout(timeout); adapter.current?.dispose(); adapter.current = null; target.replaceChildren(); target.classList.remove('maplibregl-map') }
   }, [region.id, engine])
   useEffect(() => { adapter.current?.update(snapshot.current) }, [plan, handles, selectionId])
   return <figure className="map-figure" data-map-engine={engine} data-map-state={failure ? 'failed' : ready ? 'ready' : 'loading'}>

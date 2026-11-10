@@ -196,3 +196,26 @@ for (const engine of ['maplibre', 'geoman', 'openlayers']) {
     await page.screenshot({ path: `test-results/${test.info().project.name}-${engine}-limits.png`, fullPage: true, scale: 'css' })
   })
 }
+
+
+test('switches to OpenLayers after WebGL failure and rapid renderer changes', async ({ page, request }) => {
+  const id = await createFixture(request, 'Renderer recovery fixture')
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext
+    HTMLCanvasElement.prototype.getContext = function(this: HTMLCanvasElement, type: string, ...args: unknown[]) {
+      if (type.startsWith('webgl')) return null
+      return Reflect.apply(original, this, [type, ...args])
+    } as typeof original
+  })
+  await page.goto(`/?event=${id}&map=maplibre`)
+  await expect(page.locator('.map-figure')).toHaveAttribute('data-map-state', 'failed')
+  const renderer = page.getByLabel('Map renderer')
+  await renderer.selectOption('openlayers')
+  await renderer.selectOption('geoman')
+  await renderer.selectOption('openlayers')
+  await expect(page.locator('.map-figure')).toHaveAttribute('data-map-engine', 'openlayers')
+  await expect(page.locator('.map-figure')).toHaveAttribute('data-map-state', 'ready')
+  await expect(page.locator('.map-canvas canvas')).toHaveCount(1)
+  await page.getByRole('button', { name: 'Add restriction' }).click()
+  await expect(page.getByLabel('Location description')).toBeVisible()
+})
